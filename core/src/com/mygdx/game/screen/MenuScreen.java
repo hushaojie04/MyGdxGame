@@ -16,6 +16,7 @@ import com.mygdx.game.MyGdxGame;
 import com.mygdx.game.ViewHandler.ExitDialog;
 import com.mygdx.game.ViewHandler.AreaButton;
 import com.mygdx.game.ViewHandler.OnClickListener;
+import com.mygdx.game.resource.MusicManager;
 import com.mygdx.game.resource.Res;
 
 
@@ -79,6 +80,8 @@ public class MenuScreen implements Screen {
 //        Label nameLabel = new Label("name", skin, "default");
 //        nameLabel.setPosition(100, 100);
 //        stage.addActor(nameLabel);
+        new MusicManager();
+        MusicManager.play();
     }
 
     @Override
@@ -98,12 +101,12 @@ public class MenuScreen implements Screen {
 
     @Override
     public void pause() {
-
+        MusicManager.stop();
     }
 
     @Override
     public void resume() {
-
+        MusicManager.play();
     }
 
     @Override
