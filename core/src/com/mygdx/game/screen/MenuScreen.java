@@ -1,28 +1,21 @@
 package com.mygdx.game.screen;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.input.GestureDetector;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.mygdx.game.MyGdxGame;
-import com.mygdx.game.Utils.AreaUtils;
+import com.mygdx.game.ViewHandler.ExitDialog;
+import com.mygdx.game.ViewHandler.AreaButton;
+import com.mygdx.game.ViewHandler.OnClickListener;
 import com.mygdx.game.resource.Res;
 
 
@@ -34,14 +27,17 @@ public class MenuScreen implements Screen {
     private Stage stage;
     private Image background;
     private Button adventureBtn, survivalBtn;
+    private AreaButton mExitButton;
 
     public MenuScreen(MyGdxGame game) {
         myGdxGame = game;
     }
 
+    private ExitDialog mAlertDialog;
+
     @Override
     public void show() {
-
+        mAlertDialog = new ExitDialog();
         stage = new Stage();
         background = new Image(Res.getSurfaceTexture());
         background.setFillParent(true);
@@ -63,11 +59,26 @@ public class MenuScreen implements Screen {
 
             }
         });
+        mExitButton = new AreaButton(1697, 97, 180, 180);
+        mExitButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(Object object) {
+                mAlertDialog.show(stage);
+            }
+        });
+
+
         stage.addActor(background);
         stage.addActor(adventureBtn);
         stage.addActor(survivalBtn);
-        AreaUtils.init();
+
+//        AreaUtils.init();
         Gdx.input.setInputProcessor(stage);
+
+        //        Skin skin = new Skin(Gdx.files.internal("json/skin.json"));
+//        Label nameLabel = new Label("name", skin, "default");
+//        nameLabel.setPosition(100, 100);
+//        stage.addActor(nameLabel);
     }
 
     @Override
@@ -76,7 +87,8 @@ public class MenuScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act();
         stage.draw();
-        AreaUtils.draw();
+        mExitButton.act(v);
+//        AreaUtils.draw();
     }
 
     @Override
