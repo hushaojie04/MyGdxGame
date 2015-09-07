@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+import com.mygdx.game.Level.LevelManager;
 import com.mygdx.game.MyGdxGame;
 import com.mygdx.game.ViewHandler.ExitDialog;
 import com.mygdx.game.ViewHandler.AreaButton;
@@ -47,7 +48,13 @@ public class MenuScreen implements Screen {
         adventureBtn.setWidth(Gdx.graphics.getWidth() * 0.33f);
         adventureBtn.setHeight(Gdx.graphics.getHeight() * 0.33f);
         adventureBtn.setPosition(Gdx.graphics.getWidth() * 0.55f, Gdx.graphics.getHeight() * 0.55f);
-
+        adventureBtn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                myGdxGame.startGameScreen();
+            }
+        });
         spilt = TextureRegion.split(Res.getSelectorScreenSurvivalTexture(), 313, 131);
         survivalBtn = new Button(new SpriteDrawable(new Sprite(spilt[0][0])), new SpriteDrawable(new Sprite(spilt[1][0])));
         survivalBtn.setWidth(Gdx.graphics.getWidth() * 0.3f);
@@ -82,6 +89,7 @@ public class MenuScreen implements Screen {
 //        stage.addActor(nameLabel);
         new MusicManager();
         MusicManager.play();
+        LevelManager.getManager().setLevel(1);
     }
 
     @Override

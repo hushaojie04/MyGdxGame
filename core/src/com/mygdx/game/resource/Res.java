@@ -15,13 +15,16 @@ public class Res {
         manager.load("image/Surface.png", Texture.class);
         manager.load("image/button/SelectorScreenStartAdventur.png", Texture.class);
         manager.load("image/button/SelectorScreenSurvival.png", Texture.class);
+        manager.load("image/background1unsodded.jpg", Texture.class);
+
+
     }
 
     public static void unload() {
         manager.unload("image/Surface.png");
         manager.unload("image/button/SelectorScreenStartAdventur.png");
         manager.unload("image/button/SelectorScreenSurvival.png");
-
+        manager.unload("image/background1unsodded.jpg");
     }
 
     public static float update() {
@@ -42,5 +45,9 @@ public class Res {
 
     public static Texture getSelectorScreenSurvivalTexture() {
         return manager.get("image/button/SelectorScreenSurvival.png", Texture.class);
+    }
+
+    public static Texture getBackground1unsoddedTexture() {
+        return manager.get("image/background1unsodded.jpg", Texture.class);
     }
 }
