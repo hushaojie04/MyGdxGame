@@ -16,8 +16,7 @@ public class Res {
         manager.load("image/button/SelectorScreenStartAdventur.png", Texture.class);
         manager.load("image/button/SelectorScreenSurvival.png", Texture.class);
         manager.load("image/background1unsodded.jpg", Texture.class);
-
-
+        manager.load("image/Zombie/Zombie.gif", Texture.class);
     }
 
     public static void unload() {
@@ -25,6 +24,7 @@ public class Res {
         manager.unload("image/button/SelectorScreenStartAdventur.png");
         manager.unload("image/button/SelectorScreenSurvival.png");
         manager.unload("image/background1unsodded.jpg");
+        manager.unload("image/Zombie/Zombie.gif");
     }
 
     public static float update() {
@@ -50,4 +50,9 @@ public class Res {
     public static Texture getBackground1unsoddedTexture() {
         return manager.get("image/background1unsodded.jpg", Texture.class);
     }
+
+    public static Texture getZombie() {
+        return manager.get("image/Zombie/Zombie.gif", Texture.class);
+    }
+
 }

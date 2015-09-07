@@ -80,7 +80,6 @@ public class MenuScreen implements Screen {
         stage.addActor(adventureBtn);
         stage.addActor(survivalBtn);
 
-//        AreaUtils.init();
         Gdx.input.setInputProcessor(stage);
 
         //        Skin skin = new Skin(Gdx.files.internal("json/skin.json"));
@@ -99,7 +98,6 @@ public class MenuScreen implements Screen {
         stage.act();
         stage.draw();
         mExitButton.act(v);
-//        AreaUtils.draw();
     }
 
     @Override

@@ -1,12 +1,10 @@
 {
   "attackCount":"6",
   "zombiesContent":[
-    {"index":"0","zombie":[{"type":"Zombie","count":"1"}]},
-    {"index":"1","zombie":[{"type":"Zombie","count":"1"}]},
-    {"index":"2","zombie":[{"type":"Zombie","count":"1"},{"type":"ConeheadZombie","count":"1"}]},
-    {"index":"3","zombie":[{"type":"Zombie","count":"2"},{"type":"ConeheadZombie","count":"1"}]},
-    {"index":"4","zombie":[{"type":"Zombie","count":"2"},{"type":"ConeheadZombie","count":"2"}]},
-    {"index":"5","zombie":[{"type":"Zombie","count":"3"},{"type":"ConeheadZombie","count":"2"}]}
+    {"type":"Zombie","count":"1"},
+    {"type":"Zombie","count":"1"},
+    {"type":"Zombie","count":"1"},
+    {"type":"Zombie","count":"2"}
    ],
   "plantsContent":["SunFlower","Peashooter"]
 }

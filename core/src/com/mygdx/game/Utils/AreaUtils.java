@@ -54,7 +54,8 @@ public class AreaUtils {
             if (!mProgressBar.contains(x, y)) {
                 System.out.println(x + " " + y + " " + image.getWidth() + " " + image.getHeight());
                 image.setPosition(x - image.getWidth() / 2f, y - image.getHeight() / 2f);
-                show = image.getX() + " " + image.getY() + " " + image.getWidth() + " " + image.getHeight();
+                float r = (float)image.getX() /(float)Gdx.graphics.getWidth();
+                show = image.getX() + " " + image.getY() + " " + image.getWidth() + " " + image.getHeight()+" "+r;
             }
 
         }

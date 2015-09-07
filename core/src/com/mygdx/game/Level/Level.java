@@ -11,7 +11,7 @@ import java.util.List;
 public class Level {
     private int attackCount;
     private final List<String> plantsContent = new ArrayList<String>();
-    private final List<ZombieContent> zombiesContent = new ArrayList<ZombieContent>();
+    private final List<ZombieInfo> zombiesContent = new ArrayList<ZombieInfo>();
 
     public Level() {
     }
@@ -28,19 +28,19 @@ public class Level {
         return plantsContent;
     }
 
-    public List<ZombieContent> getZombiesContent() {
+    public List<ZombieInfo> getZombiesContent() {
         return zombiesContent;
     }
 
-    static class ZombieInfo {
+    public static class ZombieInfo {
         private String type;
-        private String count;
+        private int count;
 
-        public String getCount() {
+        public int getCount() {
             return count;
         }
 
-        public void setCount(String count) {
+        public void setCount(int count) {
             this.count = count;
         }
 
@@ -53,21 +53,5 @@ public class Level {
         }
     }
 
-    static class ZombieContent {
-        private int index;
-        private final List<ZombieInfo> zombie = new ArrayList<ZombieInfo>();
 
-        public int getIndex() {
-            return index;
-        }
-
-        public void setIndex(int index) {
-            this.index = index;
-        }
-
-        public List<ZombieInfo> getZombiesContent() {
-            return zombie;
-        }
-
-    }
 }
