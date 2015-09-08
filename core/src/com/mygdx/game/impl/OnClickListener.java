@@ -1,4 +1,4 @@
-package com.mygdx.game.ViewHandler;
+package com.mygdx.game.impl;
 
 import java.util.Objects;
 

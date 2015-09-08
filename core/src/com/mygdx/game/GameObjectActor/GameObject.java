@@ -1,20 +1,16 @@
 package com.mygdx.game.GameObjectActor;
 
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 /**
  * Created by Administrator on 2015/9/7.
  */
 public class GameObject extends Actor {
     public final Texture background;
-
     public GameObject(Stage stage, Texture texture, float x, float y, float width, float height) {
         super();
         System.out.println(x + " " + y + " " + width + " " + height);

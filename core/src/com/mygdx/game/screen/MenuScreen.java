@@ -9,14 +9,13 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.mygdx.game.Level.LevelManager;
 import com.mygdx.game.MyGdxGame;
 import com.mygdx.game.ViewHandler.ExitDialog;
 import com.mygdx.game.ViewHandler.AreaButton;
-import com.mygdx.game.ViewHandler.OnClickListener;
+import com.mygdx.game.impl.OnClickListener;
 import com.mygdx.game.resource.MusicManager;
 import com.mygdx.game.resource.Res;
 
@@ -36,14 +35,13 @@ public class MenuScreen implements Screen {
     }
 
     private ExitDialog mAlertDialog;
-
     @Override
     public void show() {
         mAlertDialog = new ExitDialog();
         stage = new Stage();
-        background = new Image(Res.getSurfaceTexture());
+        background = new Image(Res.getSurface());
         background.setFillParent(true);
-        TextureRegion[][] spilt = TextureRegion.split(Res.getSelectorScreenStartAdventureTexture(), 330, 146);
+        TextureRegion[][] spilt = TextureRegion.split(Res.getSelectorScreenStartAdventure(), 330, 146);
         adventureBtn = new Button(new SpriteDrawable(new Sprite(spilt[0][0])), new SpriteDrawable(new Sprite(spilt[1][0])));
         adventureBtn.setWidth(Gdx.graphics.getWidth() * 0.33f);
         adventureBtn.setHeight(Gdx.graphics.getHeight() * 0.33f);
@@ -55,7 +53,7 @@ public class MenuScreen implements Screen {
                 myGdxGame.startGameScreen();
             }
         });
-        spilt = TextureRegion.split(Res.getSelectorScreenSurvivalTexture(), 313, 131);
+        spilt = TextureRegion.split(Res.getSelectorScreenSurvival(), 313, 131);
         survivalBtn = new Button(new SpriteDrawable(new Sprite(spilt[0][0])), new SpriteDrawable(new Sprite(spilt[1][0])));
         survivalBtn.setWidth(Gdx.graphics.getWidth() * 0.3f);
         survivalBtn.setHeight(Gdx.graphics.getHeight() * 0.3f);

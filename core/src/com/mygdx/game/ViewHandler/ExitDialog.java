@@ -29,15 +29,15 @@ public class ExitDialog {
         dialog.setX((Gdx.graphics.getWidth() - dialog.getWidth()) / 2f);
         dialog.setY((Gdx.graphics.getHeight() - dialog.getHeight()) / 2f);
         Texture[] textures = {
-                new Texture(Gdx.files.internal("image/dialog_bottomleft.png")),
-                new Texture(Gdx.files.internal("image/dialog_bottommiddle.png")),
-                new Texture(Gdx.files.internal("image/dialog_bottomright.png")),
-                new Texture(Gdx.files.internal("image/dialog_centerleft.png")),
-                new Texture(Gdx.files.internal("image/dialog_centermiddle.png")),
-                new Texture(Gdx.files.internal("image/dialog_centerright.png")),
-                new Texture(Gdx.files.internal("image/dialog_topleft.png")),
-                new Texture(Gdx.files.internal("image/dialog_topmiddle.png")),
-                new Texture(Gdx.files.internal("image/dialog_topright.png"))
+                new Texture(Gdx.files.internal("image/system/dialog_bottomleft.png")),
+                new Texture(Gdx.files.internal("image/system/dialog_bottommiddle.png")),
+                new Texture(Gdx.files.internal("image/system/dialog_bottomright.png")),
+                new Texture(Gdx.files.internal("image/system/dialog_centerleft.png")),
+                new Texture(Gdx.files.internal("image/system/dialog_centermiddle.png")),
+                new Texture(Gdx.files.internal("image/system/dialog_centerright.png")),
+                new Texture(Gdx.files.internal("image/system/dialog_topleft.png")),
+                new Texture(Gdx.files.internal("image/system/dialog_topmiddle.png")),
+                new Texture(Gdx.files.internal("image/system/dialog_topright.png"))
         };
         LinearLayout mLinearLayout = null;
         LinearLayout vertical = new LinearLayout(LinearLayout.VERTICAL);
@@ -75,7 +75,7 @@ public class ExitDialog {
         BitmapFont font = new BitmapFont(Gdx.files.internal("font/myfont.fnt"));
         TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
 //        Sprite sprite = new Sprite(new Texture(Gdx.files.internal("image/Button.png")));
-        Texture texture = new Texture(Gdx.files.internal("image/Button.png"));
+        Texture texture = new Texture(Gdx.files.internal("image/system/Button.png"));
         NinePatch ninePatch = new NinePatch(texture, 10, 10, 20, 20);
         NinePatchDrawable drawable = new NinePatchDrawable(ninePatch);
         textButtonStyle.down = drawable;

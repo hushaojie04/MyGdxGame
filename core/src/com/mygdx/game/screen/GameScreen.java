@@ -1,20 +1,18 @@
 package com.mygdx.game.screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.mygdx.game.GameObjectActor.GameObject;
 import com.mygdx.game.Level.Level;
 import com.mygdx.game.Level.LevelManager;
 import com.mygdx.game.MyGdxGame;
 import com.mygdx.game.Utils.AreaUtils;
+import com.mygdx.game.ViewActor.ScrollSod;
+import com.mygdx.game.impl.CameraAction;
 import com.mygdx.game.World;
-import com.mygdx.game.resource.Res;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -25,6 +23,7 @@ public class GameScreen implements Screen {
     private World world;
     private Camera camera;
     public float distance;
+    private CameraAction cameraAction;
 
     interface onLevelChangeListener {
         void onLevelChange();
@@ -42,15 +41,15 @@ public class GameScreen implements Screen {
         stage = new Stage();
         world = new World();
         camera = stage.getCamera();
-
+        cameraAction = new CameraAction(previewOnCameraAction);
         LevelManager.getManager().setLevel(1);
         currentLevel = LevelManager.getManager().getLevel();
         distance = Gdx.graphics.getWidth() * 0.37f;
-
         world.createGameObject(currentLevel, stage);
 //        AreaUtils.init();
-
     }
+
+    private boolean isPreview = false;
 
     @Override
     public void render(float v) {
@@ -59,30 +58,14 @@ public class GameScreen implements Screen {
         stage.act();
         stage.draw();
 //        AreaUtils.draw();
-        previewMap();
-
-    }
-
-    private boolean isPreview = false;
-    float time;
-    float distancex;
-    float speed = 20;
-
-    private void previewMap() {
-        time += Gdx.graphics.getDeltaTime();
         if (!isPreview) {
-            if (time < 1) {
-                if (distancex < distance) {
-                    distancex += speed;
-                    camera.translate(speed, 0, 0);
-                }
+            isPreview = true;
+            if (cameraAction.action(stage)) {
+                world.start();
             }
-            else if (time > 2 && time < 3) {
-                if (distancex > 0) {
-                    distancex -= speed;
-                    camera.translate(-speed, 0, 0);
-                }
-            }
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.BACK)) {
+            myGdxGame.openMenuScreen();
         }
     }
 
@@ -110,4 +93,31 @@ public class GameScreen implements Screen {
     public void dispose() {
 
     }
+
+    private CameraAction.OnCameraAction previewOnCameraAction = new CameraAction.OnCameraAction() {
+        private float time;
+        private float distancex;
+        private float speed = 20;
+
+        @Override
+        public boolean onAction(Stage stage) {
+            time += Gdx.graphics.getDeltaTime();
+            boolean endAction = false;
+//            if (time < 1) {
+//                if (distancex < distance) {
+//                    distancex += speed;
+//                    stage.getCamera().translate(speed, 0, 0);
+//                }
+//            } else if (time > 2 && time < 3) {
+//                if (distancex > 0) {
+//                    distancex -= speed;
+//                    stage.getCamera().translate(-speed, 0, 0);
+//                } else {
+//                    endAction = true;
+//                }
+//            }
+            return true;
+        }
+
+    };
 }

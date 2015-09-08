@@ -1,6 +1,8 @@
-package com.mygdx.game.ViewHandler;
+package com.mygdx.game.impl;
 
-import javafx.stage.Stage;
+
+import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 
 /**
  * Created by Administrator on 2015/9/7.
@@ -12,11 +14,11 @@ public class CameraAction {
         this.onCameraAction = onCameraAction;
     }
 
-    public void action(Stage stage) {
-        onCameraAction.onAction(stage);
+    public boolean action(Stage stage) {
+        return onCameraAction.onAction(stage);
     }
 
     public interface OnCameraAction {
-        void onAction(Stage stage);
+        boolean onAction(Stage stage);
     }
 }
