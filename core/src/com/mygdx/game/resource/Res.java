@@ -3,6 +3,7 @@ package com.mygdx.game.resource;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
 /**
@@ -12,6 +13,7 @@ public class Res {
     private static AssetManager manager = new AssetManager();
 
     public static void load() {
+        /* ******************************Texture********************************* */
         manager.load("image/Surface.png", Texture.class);
         manager.load("image/button/SelectorScreenStartAdventur.png", Texture.class);
         manager.load("image/button/SelectorScreenSurvival.png", Texture.class);
@@ -27,9 +29,17 @@ public class Res {
         manager.load("image/card/PeashooterG.png", Texture.class);
         manager.load("image/card/SunFlower.png", Texture.class);
         manager.load("image/card/SunFlowerG.png", Texture.class);
+        manager.load("image/card/SunBack.png", Texture.class);
+        manager.load("image/Zombie/FlagMeterEmpty.png", Texture.class);
+        manager.load("image/Zombie/FlagMeterFull.png", Texture.class);
+        manager.load("image/Zombie/FlagMeterParts1.png", Texture.class);
+      /* ******************************BitmatFont********************************* */
+        manager.load("font/myfont.fnt", BitmapFont.class);
+
     }
 
     public static void unload() {
+         /* ******************************Texture********************************* */
         manager.unload("image/Surface.png");
         manager.unload("image/button/SelectorScreenStartAdventur.png");
         manager.unload("image/button/SelectorScreenSurvival.png");
@@ -45,6 +55,13 @@ public class Res {
         manager.unload("image/card/PeashooterG.png");
         manager.unload("image/card/SunFlower.png");
         manager.unload("image/card/SunFlowerG.png");
+        manager.unload("image/card/SunBack.png");
+        manager.unload("image/Zombie/FlagMeterEmpty.png");
+        manager.unload("image/Zombie/FlagMeterFull.png");
+        manager.unload("image/Zombie/FlagMeterParts1.png");
+        /* ******************************BitmatFont********************************* */
+        manager.unload("font/myfont.fnt");
+
     }
 
     public static float update() {
@@ -55,6 +72,7 @@ public class Res {
         return manager.update();
     }
 
+    /* ******************************Texture********************************* */
     public static Texture getSurface() {
         return manager.get("image/Surface.png", Texture.class);
     }
@@ -94,9 +112,11 @@ public class Res {
     public static Texture getLawnMower() {
         return manager.get("image/map/LawnMower.gif", Texture.class);
     }
+
     public static Texture getPeashooterbmp() {
         return manager.get("image/card/Peashooter.bmp", Texture.class);
     }
+
     public static Texture getPeashooter() {
         return manager.get("image/card/Peashooter.png", Texture.class);
     }
@@ -111,5 +131,26 @@ public class Res {
 
     public static Texture getSunFlowerG() {
         return manager.get("image/card/SunFlowerG.png", Texture.class);
+    }
+
+    public static Texture getSunBack() {
+        return manager.get("image/card/SunBack.png", Texture.class);
+    }
+
+    public static Texture getFlagMeterEmpty() {
+        return manager.get("image/Zombie/FlagMeterEmpty.png", Texture.class);
+    }
+
+    public static Texture getFlagMeterFull() {
+        return manager.get("image/Zombie/FlagMeterFull.png", Texture.class);
+    }
+
+    public static Texture getFlagMeterParts1() {
+        return manager.get("image/Zombie/FlagMeterParts1.png", Texture.class);
+    }
+
+    /* ******************************BitmatFont********************************* */
+    public static BitmapFont getMyfont() {
+        return manager.get("font/myfont.fnt", BitmapFont.class);
     }
 }

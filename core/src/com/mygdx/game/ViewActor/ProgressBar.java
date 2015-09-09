@@ -41,7 +41,7 @@ public class ProgressBar extends Actor implements Disposable {
         if (Gdx.input.isTouched()) {
             int x = Gdx.input.getX();
             int y = Gdx.graphics.getHeight() - Gdx.input.getY();
-            System.out.println("contains = " + rectangle.contains(x, y));
+//            System.out.println("contains = " + rectangle.contains(x, y));
             if (rectangle.contains(x, y)) {
                 float percent = (float) (x - rectangle.getX()) / (float) rectangle.getWidth();
                 progress = percent;

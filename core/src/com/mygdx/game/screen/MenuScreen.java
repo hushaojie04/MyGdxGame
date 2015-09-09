@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.mygdx.game.Level.LevelManager;
 import com.mygdx.game.MyGdxGame;
+import com.mygdx.game.Utils.Log;
 import com.mygdx.game.ViewHandler.ExitDialog;
 import com.mygdx.game.ViewHandler.AreaButton;
 import com.mygdx.game.impl.OnClickListener;
@@ -35,8 +36,10 @@ public class MenuScreen implements Screen {
     }
 
     private ExitDialog mAlertDialog;
+
     @Override
     public void show() {
+        Log.show("munuscreen show");
         mAlertDialog = new ExitDialog();
         stage = new Stage();
         background = new Image(Res.getSurface());
@@ -100,26 +103,28 @@ public class MenuScreen implements Screen {
 
     @Override
     public void resize(int i, int i1) {
-
+        Log.show("munuscreen resize");
     }
 
     @Override
     public void pause() {
+        Log.show("munuscreen pause");
         MusicManager.stop();
     }
 
     @Override
     public void resume() {
+        Log.show("munuscreen resume");
         MusicManager.play();
     }
 
     @Override
     public void hide() {
-
+        Log.show("munuscreen hide");
     }
 
     @Override
     public void dispose() {
-
+        Log.show("munuscreen dispose");
     }
 }

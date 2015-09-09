@@ -10,6 +10,7 @@ import com.mygdx.game.Level.Level;
 import com.mygdx.game.Level.LevelManager;
 import com.mygdx.game.MyGdxGame;
 import com.mygdx.game.Utils.AreaUtils;
+import com.mygdx.game.Utils.Log;
 import com.mygdx.game.ViewActor.ScrollSod;
 import com.mygdx.game.impl.CameraAction;
 import com.mygdx.game.World;
@@ -38,6 +39,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
+        Log.show("gamescreen show");
         stage = new Stage();
         world = new World();
         camera = stage.getCamera();
@@ -47,6 +49,7 @@ public class GameScreen implements Screen {
         distance = Gdx.graphics.getWidth() * 0.37f;
         world.createGameObject(currentLevel, stage);
 //        AreaUtils.init();
+        Gdx.input.setInputProcessor(stage);
     }
 
     private boolean isPreview = false;
@@ -55,6 +58,7 @@ public class GameScreen implements Screen {
     public void render(float v) {
         Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        world.act(Gdx.graphics.getDeltaTime());
         stage.act();
         stage.draw();
 //        AreaUtils.draw();
@@ -71,27 +75,29 @@ public class GameScreen implements Screen {
 
     @Override
     public void resize(int i, int i1) {
-
+        Log.show("gamescreen resize");
     }
 
     @Override
     public void pause() {
+        Log.show("gamescreen pause");
 
     }
 
     @Override
     public void resume() {
-
+        Log.show("gamescreen show");
     }
 
     @Override
     public void hide() {
+        Log.show("gamescreen hide");
 
     }
 
     @Override
     public void dispose() {
-
+        Log.show("gamescreen dispose");
     }
 
     private CameraAction.OnCameraAction previewOnCameraAction = new CameraAction.OnCameraAction() {

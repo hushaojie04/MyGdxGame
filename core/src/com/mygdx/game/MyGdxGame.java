@@ -18,12 +18,14 @@ import com.mygdx.game.screen.MenuScreen;
 public class MyGdxGame extends Game {
     Screen mLoadingScreen;
     Screen mMenuScreen;
+    GameScreen mGameScreen;
 
     @Override
     public void create() {
         Gdx.input.setCatchBackKey(true);
         mLoadingScreen = new LoadingScreen(this);
         mMenuScreen = new MenuScreen(this);
+//        mGameScreen = new GameScreen(this);
         setScreen(mLoadingScreen);
     }
 
@@ -49,5 +51,6 @@ public class MyGdxGame extends Game {
     @Override
     public void pause() {
         super.pause();
+
     }
 }

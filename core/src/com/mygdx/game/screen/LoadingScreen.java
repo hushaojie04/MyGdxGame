@@ -41,7 +41,7 @@ public class LoadingScreen implements Screen {
             if (Res.isLoaded()) {
                 myGdxGame.openMenuScreen();
             }
-            System.out.println("percent " + Res.update());
+//            System.out.println("percent " + Res.update());
         }
         Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
