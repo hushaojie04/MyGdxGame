@@ -25,7 +25,6 @@ public class GameScreen implements Screen {
     private Camera camera;
     public float distance;
     private CameraAction cameraAction;
-
     interface onLevelChangeListener {
         void onLevelChange();
     }
@@ -49,6 +48,7 @@ public class GameScreen implements Screen {
         distance = Gdx.graphics.getWidth() * 0.37f;
         world.createGameObject(currentLevel, stage);
 //        AreaUtils.init();
+        AreaUtils.initFPS();
         Gdx.input.setInputProcessor(stage);
     }
 
@@ -71,6 +71,7 @@ public class GameScreen implements Screen {
         if (Gdx.input.isKeyJustPressed(Input.Keys.BACK)) {
             myGdxGame.openMenuScreen();
         }
+        AreaUtils.drawFPS();
     }
 
     @Override

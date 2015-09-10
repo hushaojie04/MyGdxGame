@@ -3,9 +3,17 @@ package com.mygdx.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Event;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.MoveByAction;
+import com.badlogic.gdx.scenes.scene2d.actions.ParallelAction;
+import com.badlogic.gdx.scenes.scene2d.actions.RotateByAction;
+import com.badlogic.gdx.scenes.scene2d.actions.ScaleByAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -14,16 +22,22 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.SnapshotArray;
 import com.mygdx.game.GameObjectActor.GameObject;
+import com.mygdx.game.GameObjectActor.LifeObject;
 import com.mygdx.game.Level.Level;
+import com.mygdx.game.Utils.GifDecoder;
 import com.mygdx.game.Utils.Log;
 import com.mygdx.game.ViewActor.Card;
 import com.mygdx.game.ViewActor.LinearLayout;
 import com.mygdx.game.ViewActor.ScrollSod;
 import com.mygdx.game.ViewActor.TextView;
+import com.mygdx.game.impl.OnClickListener;
 import com.mygdx.game.resource.Res;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+
+import javax.swing.Action;
 
 /**
  * Created by Administrator on 2015/9/7.
@@ -39,9 +53,17 @@ public class World {
     public static float ratioW = 1f;
     public TextView sunBack;
     public int sunCount;
-    Command mCommand;
-    Stage stage;
     public float time;
+
+    private Command mCommand;
+    private Stage stage;
+    private float worldTime;
+    private Animation sunAnim;
+    private Command createSumCommand;
+
+    public World() {
+        sunAnim = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("image/map/Sun.gif").read());
+    }
 
     public void createGameObject(Level level, Stage stage) {
         this.stage = stage;
@@ -49,27 +71,76 @@ public class World {
         mLinearlayout.setX(10);
         createBackground(stage);
         createZombieObjects(level, stage);
-
     }
 
     public void act(float delta) {
+        worldTime += delta;
         time += delta;
-        if (time > 3.0f) {
+        if (time > 5f) {
             time = 0;
-            setSunBack();
+            if (createSumCommand != null) {
+                createSumCommand.doCommand();
+            }
         }
 
     }
 
+    private void createSun() {
+        createSumCommand = new Command() {
+            @Override
+            public void doCommand() {
+                float x = (float) (Gdx.graphics.getWidth() * 0.1f + Math.random() * (Gdx.graphics.getWidth() * 0.8f));
+//                LifeObject sun = new LifeObject(stage, sunAnim, x, Gdx.graphics.getHeight(), true);
+                LifeObject sun = new LifeObject(stage, sunAnim, 1000, 800, false);
+                sun.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(Object object) {
+                        final GameObject actor = (GameObject) object;
+//                        actor.getParent().removeActor(actor);
+                        actor.scaleBy(2,2);
+                        actor.moveBy();
+                        Log.show("onClick");
+                        MoveByAction action1 = Actions.moveBy(150, 0, 3);
+                        ScaleByAction action2 = Actions.scaleBy(1000f, 1000f, 3);
+                        ParallelAction Paction = Actions.parallel(action2, action1);
+//                        actor.addAction(Paction);
+                        Actions.run(new Runnable() {
+                            @Override
+                            public void run() {
+                                Log.show("Runnable");
+                            }
+                        });
+//                        Actions.addListener(new EventListener() {
+//                            @Override
+//                            public boolean handle(Event event) {
+//                                return false;
+//                            }
+//                        },true);
+//                        setSunBack();
+                    }
+                });
+//                sun.setLifeTime(true, 11f);
+//                float y = (float) (Gdx.graphics.getHeight() * 0.1f + Math.random() * (Gdx.graphics.getHeight() * 0.4f));
+//                sun.moveDistance(3, 0, y);
+            }
+        };
+    }
+
     public void setSunBack() {
         sunCount += 50;
-        sunBack.setText("" + sunCount);
+        if (sunBack != null)
+            sunBack.setText("" + sunCount);
         SnapshotArray<Actor> array = mLinearlayout.getChildren();
         for (Actor actor : array) {
             if (actor instanceof Card) {
                 ((Card) actor).checkCost(sunCount);
             }
         }
+
+    }
+
+    public float getWorldTime() {
+        return worldTime;
     }
 
     public void start() {
@@ -91,6 +162,7 @@ public class World {
                 createSunBack();
                 createLawnMower();
                 createCard();
+                createSun();
             }
         });
         mCommand = new Command() {
@@ -116,6 +188,8 @@ public class World {
         sunBack.setPadding(0.4f, 0.65f);
         sunBack.setX(Gdx.graphics.getWidth() * 0.3f);
         sunBack.setY(Gdx.graphics.getHeight() - sunBack.getHeight());
+
+        mapSceneObjects.add(sunBack);
         stage.addActor(sunBack);
     }
 
@@ -123,6 +197,7 @@ public class World {
         mLinearlayout.add(new Card(Res.getPeashooterG(), Res.getPeashooter(), 150));
         mLinearlayout.add(new Card(Res.getSunFlowerG(), Res.getSunFlower(), 50));
         mLinearlayout.setPosition(mLinearlayout.getX(), Gdx.graphics.getHeight() - mLinearlayout.getHeight());
+        mapSceneObjects.add(mLinearlayout);
         stage.addActor(mLinearlayout);
     }
 

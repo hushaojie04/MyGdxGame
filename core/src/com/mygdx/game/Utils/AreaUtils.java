@@ -2,6 +2,7 @@ package com.mygdx.game.Utils;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -54,8 +55,8 @@ public class AreaUtils {
             if (!mProgressBar.contains(x, y)) {
                 System.out.println(x + " " + y + " " + image.getWidth() + " " + image.getHeight());
                 image.setPosition(x - image.getWidth() / 2f, y - image.getHeight() / 2f);
-                float r = (float)image.getX() /(float)Gdx.graphics.getWidth();
-                show = image.getX() + " " + image.getY() + " " + image.getWidth() + " " + image.getHeight()+" "+r;
+                float r = (float) image.getX() / (float) Gdx.graphics.getWidth();
+                show = image.getX() + " " + image.getY() + " " + image.getWidth() + " " + image.getHeight() + " " + r;
             }
 
         }
@@ -67,5 +68,30 @@ public class AreaUtils {
         spriteBatch.end();
     }
 
+    private static float elapsedRealtimeMs;
+    private static int frameCount = 0;
 
+    private static void logFrameRate() {
+        elapsedRealtimeMs += Gdx.graphics.getDeltaTime();
+        if (elapsedRealtimeMs >= 1.0) {
+//            Log.show((float)frameCount / elapsedRealtimeMs + "fps");
+            show = "fps:" + frameCount / elapsedRealtimeMs;
+            frameCount = 0;
+            elapsedRealtimeMs = 0;
+        }
+        frameCount++;
+    }
+
+    public static void initFPS() {
+        spriteBatch = new SpriteBatch();
+        mBitmapFont = new BitmapFont(Gdx.files.internal("font/myfont.fnt"), Gdx.files.internal("font/myfont.png"), false);
+        mBitmapFont.setColor(Color.RED);
+    }
+
+    public static void drawFPS() {
+        logFrameRate();
+        spriteBatch.begin();
+        mBitmapFont.draw(spriteBatch, show, 150, 90);
+        spriteBatch.end();
+    }
 }
