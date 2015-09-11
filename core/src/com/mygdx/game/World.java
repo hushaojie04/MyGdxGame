@@ -4,43 +4,28 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Event;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.actions.MoveByAction;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
 import com.badlogic.gdx.scenes.scene2d.actions.ParallelAction;
-import com.badlogic.gdx.scenes.scene2d.actions.RotateByAction;
 import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
-import com.badlogic.gdx.scenes.scene2d.actions.ScaleByAction;
 import com.badlogic.gdx.scenes.scene2d.actions.ScaleToAction;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.SnapshotArray;
 import com.mygdx.game.GameObjectActor.GameObject;
 import com.mygdx.game.GameObjectActor.LifeObject;
 import com.mygdx.game.Level.Level;
 import com.mygdx.game.Utils.GifDecoder;
-import com.mygdx.game.Utils.Log;
-import com.mygdx.game.ViewActor.Card;
+import com.mygdx.game.GameObjectActor.Card;
 import com.mygdx.game.ViewActor.LinearLayout;
+import com.mygdx.game.ViewActor.RadioGroup;
 import com.mygdx.game.ViewActor.ScrollSod;
 import com.mygdx.game.ViewActor.TextView;
 import com.mygdx.game.impl.OnClickListener;
 import com.mygdx.game.resource.Res;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-
-import javax.swing.Action;
 
 /**
  * Created by Administrator on 2015/9/7.
@@ -51,7 +36,7 @@ public class World {
     public List<GameObject> bulletObjects = new ArrayList<GameObject>();
     public List<GameObject> gameSceneObjects = new ArrayList<GameObject>();
     public List<Actor> mapSceneObjects = new ArrayList<Actor>();
-    public LinearLayout mLinearlayout;
+    public RadioGroup mLinearlayout;
     public static float ratioH = 1f;
     public static float ratioW = 1f;
     public TextView sunBack;
@@ -70,7 +55,7 @@ public class World {
 
     public void createGameObject(Level level, Stage stage) {
         this.stage = stage;
-        mLinearlayout = new LinearLayout(LinearLayout.VERTICAL);
+        mLinearlayout = new RadioGroup(LinearLayout.VERTICAL);
         mLinearlayout.setX(10);
         createBackground(stage);
         createZombieObjects(level, stage);
@@ -88,9 +73,6 @@ public class World {
 
     }
 
-    private int countd = 0;
-    private int countc = 0;
-
     private void createSun() {
         createSumCommand = new Command() {
             @Override
@@ -100,7 +82,6 @@ public class World {
                 sun.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(Object object) {
-                        Log.show("onClick " + object.hashCode());
                         final GameObject actor = (GameObject) object;
 //
                         MoveToAction action1 = Actions.moveTo(sunBack.getX(), sunBack.getY(), 0.3f);
@@ -108,8 +89,7 @@ public class World {
                         RunnableAction action3 = Actions.run(new Runnable() {
                             @Override
                             public void run() {
-                                Log.show("Runnable " + countd++);
-                                if (actor != null) {
+                                if (actor != null && actor.getParent() != null) {
                                     actor.setTouchMode(false);
                                     actor.getParent().removeActor(actor);
                                 }
@@ -127,10 +107,11 @@ public class World {
                 sun.addAction(action1);
             }
         };
+        createSumCommand.doCommand();
     }
 
     public void setSunBack() {
-        sunCount += 50;
+        sunCount += 25;
         if (sunBack != null)
             sunBack.setText("" + sunCount);
         SnapshotArray<Actor> array = mLinearlayout.getChildren();

@@ -5,11 +5,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Disposable;
 import com.mygdx.game.Utils.Log;
+import com.mygdx.game.ViewActor.ClickHelper;
 import com.mygdx.game.World;
 import com.mygdx.game.impl.OnClickListener;
 
@@ -21,14 +21,29 @@ public class GameObject extends Actor implements Disposable {
     private Animation animation;
     private float livingTime = 0;
     private TextureRegion currentFrame;
+    private ClickHelper mClickHelper;
+
+    public GameObject() {
+        super();
+        mClickHelper = new ClickHelper() {
+            @Override
+            protected void clicked() {
+                GameObject.this.clicked();
+            }
+        };
+    }
+
+    public ClickHelper getClickHelper() {
+        return mClickHelper;
+    }
 
     public GameObject(Stage stage, Texture texture, float x, float y, float width, float height) {
-        super();
+        this();
         init(stage, null, texture, x, y, width, height);
     }
 
     public GameObject(Stage stage, Animation animation, float x, float y) {
-        super();
+        this();
         init(stage, animation, null, x, y,
                 animation.getKeyFrames()[0].getRegionWidth() * World.ratioW,
                 animation.getKeyFrames()[0].getRegionHeight() * World.ratioH);
@@ -44,9 +59,6 @@ public class GameObject extends Actor implements Disposable {
         stage.addActor(this);
     }
 
-    public Rectangle rectangle() {
-        return new Rectangle(getX(), getY(), getWidth(), getHeight());
-    }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
@@ -64,7 +76,6 @@ public class GameObject extends Actor implements Disposable {
     private float objectLifeTime = -1f;
     private boolean startLifeTimeMode = false;
     private boolean enableTouchMode = false;
-    private OnClickListener mOnClickListener;
 
     public void setLifeTime(boolean startLifeTimeMode, float objectLifeTime) {
         this.objectLifeTime = objectLifeTime;
@@ -77,7 +88,7 @@ public class GameObject extends Actor implements Disposable {
 
     public void setOnClickListener(OnClickListener listener) {
         enableTouchMode = true;
-        mOnClickListener = listener;
+        mClickHelper.setOnClickListener(listener);
     }
 
     @Override
@@ -85,21 +96,17 @@ public class GameObject extends Actor implements Disposable {
         super.act(delta);
         if (startLifeTimeMode) {
             if (livingTime > objectLifeTime) {
-                getParent().removeActor(this);
+                if (getParent() != null)
+                    getParent().removeActor(this);
             }
         }
         if (enableTouchMode) {
-            if (Gdx.input.isTouched()) {
-                float y = Gdx.graphics.getHeight() - Gdx.input.getY();
-                if (rectangle().contains(Gdx.input.getX(), y)) {
-                    if (mOnClickListener != null) {
-                        mOnClickListener.onClick(this);
-                    }
-                }
-            }
+            mClickHelper.act(this);
         }
     }
 
+    protected void clicked() {
+    }
 
     public float getLivingTime() {
         return livingTime;
