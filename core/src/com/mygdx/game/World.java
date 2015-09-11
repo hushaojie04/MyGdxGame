@@ -62,15 +62,16 @@ public class World {
     }
 
     public void act(float delta) {
-        worldTime += delta;
-        time += delta;
-        if (time > 5f) {
-            time = 0;
-            if (createSumCommand != null) {
-                createSumCommand.doCommand();
+        if (isStart) {
+            worldTime += delta;
+            time += delta;
+            if (time > 5f) {
+                time = 0;
+                if (createSumCommand != null) {
+                    createSumCommand.doCommand();
+                }
             }
         }
-
     }
 
     private void createSun() {
@@ -127,7 +128,10 @@ public class World {
         return worldTime;
     }
 
+    private boolean isStart = false;
+
     public void start() {
+        isStart = true;
         if (mCommand != null)
             mCommand.doCommand();
     }

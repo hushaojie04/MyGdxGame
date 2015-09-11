@@ -25,6 +25,7 @@ public class GameScreen implements Screen {
     private Camera camera;
     public float distance;
     private CameraAction cameraAction;
+
     interface onLevelChangeListener {
         void onLevelChange();
     }
@@ -63,8 +64,8 @@ public class GameScreen implements Screen {
         stage.draw();
 //        AreaUtils.draw();
         if (!isPreview) {
-            isPreview = true;
             if (cameraAction.action(stage)) {
+                isPreview = true;
                 world.start();
             }
         }
@@ -110,20 +111,20 @@ public class GameScreen implements Screen {
         public boolean onAction(Stage stage) {
             time += Gdx.graphics.getDeltaTime();
             boolean endAction = false;
-//            if (time < 1) {
-//                if (distancex < distance) {
-//                    distancex += speed;
-//                    stage.getCamera().translate(speed, 0, 0);
-//                }
-//            } else if (time > 2 && time < 3) {
-//                if (distancex > 0) {
-//                    distancex -= speed;
-//                    stage.getCamera().translate(-speed, 0, 0);
-//                } else {
-//                    endAction = true;
-//                }
-//            }
-            return true;
+            if (time < 1) {
+                if (distancex < distance) {
+                    distancex += speed;
+                    stage.getCamera().translate(speed, 0, 0);
+                }
+            } else if (time > 2 && time < 3) {
+                if (distancex > 0) {
+                    distancex -= speed;
+                    stage.getCamera().translate(-speed, 0, 0);
+                } else {
+                    endAction = true;
+                }
+            }
+            return endAction;
         }
 
     };
