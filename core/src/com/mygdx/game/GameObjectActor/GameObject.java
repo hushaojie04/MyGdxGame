@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.Disposable;
 import com.mygdx.game.Utils.Log;
 import com.mygdx.game.World;
 import com.mygdx.game.impl.OnClickListener;
@@ -15,7 +16,7 @@ import com.mygdx.game.impl.OnClickListener;
 /**
  * Created by Administrator on 2015/9/7.
  */
-public class GameObject extends Actor {
+public class GameObject extends Actor implements Disposable {
     private Texture background;
     private Animation animation;
     private float livingTime = 0;
@@ -50,12 +51,13 @@ public class GameObject extends Actor {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
+//        Log.show("draw " + getScaleX() + " " + getScaleY() + " " + getX());
         if (background != null)
             batch.draw(background, getX(), getY(), getWidth(), getHeight());
         if (animation != null) {
             livingTime += Gdx.graphics.getDeltaTime();
             currentFrame = animation.getKeyFrame(livingTime, true);
-            batch.draw(currentFrame, getX(), getY(), getWidth(), getHeight());
+            batch.draw(currentFrame, getX(), getY(), getWidth() * getScaleX(), getHeight() * getScaleY());
         }
     }
 
@@ -89,10 +91,7 @@ public class GameObject extends Actor {
         if (enableTouchMode) {
             if (Gdx.input.isTouched()) {
                 float y = Gdx.graphics.getHeight() - Gdx.input.getY();
-                Log.show("isTouched " + Gdx.input.getX() + " " + y + " " + getX() + " " + getY());
-
-                if ((Gdx.input.getX() > getX() && Gdx.input.getX() < (getX() + getWidth())) ||
-                        (y > getY() && y < (getY() + getHeight()))) {
+                if (rectangle().contains(Gdx.input.getX(), y)) {
                     if (mOnClickListener != null) {
                         mOnClickListener.onClick(this);
                     }
@@ -101,11 +100,6 @@ public class GameObject extends Actor {
         }
     }
 
-    public void setScale(float x, float y) {
-        setX(getX());
-        setWidth(getWidth() * x);
-        setHeight(getHeight() * y);
-    }
 
     public float getLivingTime() {
         return livingTime;
@@ -115,6 +109,13 @@ public class GameObject extends Actor {
     protected void finalize() throws Throwable {
         super.finalize();
         Log.show("finalize " + hashCode());
+    }
+
+    @Override
+    public void dispose() {
+        background = null;
+        currentFrame = null;
+        animation = null;
     }
 
 }

@@ -26,6 +26,7 @@ public class LifeObject extends GameObject {
         super(stage, animation, x, y);
         this.isMove = isMove;
     }
+
     public void setSpeedX(float speed) {
         this.speedX = speed;
     }

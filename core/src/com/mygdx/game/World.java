@@ -11,9 +11,12 @@ import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveByAction;
+import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
 import com.badlogic.gdx.scenes.scene2d.actions.ParallelAction;
 import com.badlogic.gdx.scenes.scene2d.actions.RotateByAction;
+import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.actions.ScaleByAction;
+import com.badlogic.gdx.scenes.scene2d.actions.ScaleToAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -85,43 +88,43 @@ public class World {
 
     }
 
+    private int countd = 0;
+    private int countc = 0;
+
     private void createSun() {
         createSumCommand = new Command() {
             @Override
             public void doCommand() {
                 float x = (float) (Gdx.graphics.getWidth() * 0.1f + Math.random() * (Gdx.graphics.getWidth() * 0.8f));
-//                LifeObject sun = new LifeObject(stage, sunAnim, x, Gdx.graphics.getHeight(), true);
-                LifeObject sun = new LifeObject(stage, sunAnim, 1000, 800, false);
+                LifeObject sun = new LifeObject(stage, sunAnim, x, Gdx.graphics.getHeight(), true);
                 sun.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(Object object) {
+                        Log.show("onClick " + object.hashCode());
                         final GameObject actor = (GameObject) object;
-//                        actor.getParent().removeActor(actor);
-                        actor.scaleBy(2,2);
-                        actor.moveBy();
-                        Log.show("onClick");
-                        MoveByAction action1 = Actions.moveBy(150, 0, 3);
-                        ScaleByAction action2 = Actions.scaleBy(1000f, 1000f, 3);
-                        ParallelAction Paction = Actions.parallel(action2, action1);
-//                        actor.addAction(Paction);
-                        Actions.run(new Runnable() {
+//
+                        MoveToAction action1 = Actions.moveTo(sunBack.getX(), sunBack.getY(), 0.3f);
+                        ScaleToAction action2 = Actions.scaleTo(0.5f, 0.5f, 0.3f);
+                        RunnableAction action3 = Actions.run(new Runnable() {
                             @Override
                             public void run() {
-                                Log.show("Runnable");
+                                Log.show("Runnable " + countd++);
+                                if (actor != null) {
+                                    actor.setTouchMode(false);
+                                    actor.getParent().removeActor(actor);
+                                }
+                                setSunBack();
                             }
                         });
-//                        Actions.addListener(new EventListener() {
-//                            @Override
-//                            public boolean handle(Event event) {
-//                                return false;
-//                            }
-//                        },true);
-//                        setSunBack();
+                        ParallelAction Paction = Actions.parallel(action2, action1);
+                        actor.addAction(Actions.sequence(Paction, action3));
+
                     }
                 });
-//                sun.setLifeTime(true, 11f);
-//                float y = (float) (Gdx.graphics.getHeight() * 0.1f + Math.random() * (Gdx.graphics.getHeight() * 0.4f));
-//                sun.moveDistance(3, 0, y);
+                sun.setLifeTime(true, 11f);
+                float y = (float) (Gdx.graphics.getHeight() * 0.1f + Math.random() * (Gdx.graphics.getHeight() * 0.4f));
+                MoveToAction action1 = Actions.moveTo(sun.getX(), y, 2f);
+                sun.addAction(action1);
             }
         };
     }
