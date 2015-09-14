@@ -1,9 +1,10 @@
-package com.mygdx.game;
+package com.mygdx.game.World;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -14,7 +15,10 @@ import com.badlogic.gdx.scenes.scene2d.actions.ScaleToAction;
 import com.badlogic.gdx.utils.SnapshotArray;
 import com.mygdx.game.GameObjectActor.GameObject;
 import com.mygdx.game.GameObjectActor.LifeObject;
+import com.mygdx.game.GameObjectActor.Plant;
 import com.mygdx.game.Level.Level;
+import com.mygdx.game.Model.Cell;
+import com.mygdx.game.Utils.AreaUtils;
 import com.mygdx.game.Utils.GifDecoder;
 import com.mygdx.game.GameObjectActor.Card;
 import com.mygdx.game.ViewActor.LinearLayout;
@@ -25,6 +29,7 @@ import com.mygdx.game.impl.OnClickListener;
 import com.mygdx.game.resource.Res;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -48,6 +53,7 @@ public class World {
     private float worldTime;
     private Animation sunAnim;
     private Command createSumCommand;
+    private Cell mCell;
 
     public World() {
         sunAnim = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("image/map/Sun.gif").read());
@@ -71,7 +77,46 @@ public class World {
                     createSumCommand.doCommand();
                 }
             }
+            if (mCell != null)
+                loopCell();
         }
+    }
+
+    private void loopCell() {
+        List<Cell.CellInfo> cellInfos = mCell.getCells();
+        Iterator<Cell.CellInfo> iterator = cellInfos.iterator();
+        while (iterator.hasNext()) {
+            Cell.CellInfo info = iterator.next();
+            if (info.isGrow) {
+                Plant plant = (Plant) info.getTag();
+            } else {
+                if (Gdx.input.isTouched()) {
+                    float x = Gdx.input.getX();
+                    float y = Gdx.input.getY();
+                    if (info.rectangle.contains(x, y)) {
+                        info.setTag(createPlant(info));
+                    }
+                }
+            }
+
+        }
+    }
+
+    public Plant createPlant(Cell.CellInfo cellInfo) {
+        cellInfo.isGrow = true;
+
+        Card card = (Card) mLinearlayout.getSelected();
+        if (card == null) return null;
+        Card.Kind kind = card.getKind();
+        Plant plant = null;
+        if (kind == Card.Kind.Peashooter) {
+            plant = new Plant(stage, GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("image/plant/Peashooter.gif").read())
+                    , cellInfo.rectangle.x, cellInfo.rectangle.y);
+        } else if (kind == Card.Kind.SunFlower) {
+            plant = new Plant(stage, GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("image/plant/SunFlower.gif").read())
+                    , cellInfo.rectangle.x, cellInfo.rectangle.y);
+        }
+        return plant;
     }
 
     private void createSun() {
@@ -160,6 +205,10 @@ public class World {
                 stage.addActor(scrollSod);
             }
         };
+        mCell = new Cell(new Rectangle(Gdx.graphics.getWidth() * 0.24f, Gdx.graphics.getHeight() * 0.44f,
+                scrollSod.getWidth(), scrollSod.getHeight()),
+                1, 9);
+
     }
 
     private void createLawnMower() {
@@ -182,8 +231,8 @@ public class World {
     }
 
     private void createCard() {
-        mLinearlayout.add(new Card(Res.getPeashooterG(), Res.getPeashooter(), 150));
-        mLinearlayout.add(new Card(Res.getSunFlowerG(), Res.getSunFlower(), 50));
+        mLinearlayout.add(new Card(Res.getPeashooterG(), Res.getPeashooter(), 150, Card.Kind.Peashooter));
+        mLinearlayout.add(new Card(Res.getSunFlowerG(), Res.getSunFlower(), 50, Card.Kind.SunFlower));
         mLinearlayout.setPosition(mLinearlayout.getX(), Gdx.graphics.getHeight() - mLinearlayout.getHeight());
         mapSceneObjects.add(mLinearlayout);
         stage.addActor(mLinearlayout);

@@ -1,17 +1,12 @@
 package com.mygdx.game.GameObjectActor;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.mygdx.game.Utils.Log;
 import com.mygdx.game.ViewActor.RadioButton;
-import com.mygdx.game.World;
-import com.mygdx.game.impl.OnClickListener;
+import com.mygdx.game.World.World;
 import com.mygdx.game.resource.Res;
 
 /**
@@ -26,9 +21,11 @@ public class Card extends GameObject implements RadioButton {
     private Texture texture, pressed;
     private BitmapFont bitmapFont;
     private boolean isPressed = false;
+    private Kind kind;
 
-    public Card(Texture background, Texture foreground, int cost) {
+    public Card(Texture background, Texture foreground, int cost, Kind kind) {
         super();
+        this.kind = kind;
         setTouchMode(true);
         this.cost = cost;
         this.background = background;
@@ -39,6 +36,10 @@ public class Card extends GameObject implements RadioButton {
         setHeight(background.getHeight() * World.ratioH);
         bitmapFont = Res.getMyfont();
         bitmapFont.setColor(Color.BLACK);
+    }
+
+    public Kind getKind() {
+        return kind;
     }
 
     public void createPixmap() {
@@ -94,4 +95,7 @@ public class Card extends GameObject implements RadioButton {
             isPressed = checked;
     }
 
+    public enum Kind {
+        SunFlower, Peashooter;
+    }
 }

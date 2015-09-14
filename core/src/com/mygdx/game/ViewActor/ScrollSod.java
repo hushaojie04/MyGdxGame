@@ -1,15 +1,11 @@
 package com.mygdx.game.ViewActor;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.mygdx.game.GameObjectActor.GameObject;
-import com.mygdx.game.World;
+import com.mygdx.game.World.World;
 import com.mygdx.game.resource.Res;
 
 
@@ -40,6 +36,16 @@ public class ScrollSod extends Actor {
     }
 
     float time;
+
+    @Override
+    public float getWidth() {
+        return sod.getWidth() * World.ratioW;
+    }
+
+    @Override
+    public float getHeight() {
+        return sod.getHeight() * World.ratioH;
+    }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {

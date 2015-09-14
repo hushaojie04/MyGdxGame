@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Disposable;
 import com.mygdx.game.Utils.Log;
 import com.mygdx.game.ViewActor.ClickHelper;
-import com.mygdx.game.World;
+import com.mygdx.game.World.World;
 import com.mygdx.game.impl.OnClickListener;
 
 /**

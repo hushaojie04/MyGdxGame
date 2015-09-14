@@ -10,6 +10,7 @@ import com.mygdx.game.GameObjectActor.Card;
  */
 public class RadioGroup extends LinearLayout {
     private final ClickHelper mClickHelper;
+    private Actor selectedChild;
 
     public RadioGroup(int orientation) {
         super(orientation);
@@ -31,6 +32,7 @@ public class RadioGroup extends LinearLayout {
                 RadioButton button = ((RadioButton) actor);
                 if (button.getClickHelper().act(actor)) {
                     button.checked(true);
+                    selectedChild = actor;
                 } else {
                     button.checked(false);
                 }
@@ -42,6 +44,9 @@ public class RadioGroup extends LinearLayout {
         return true;
     }
 
+    public Actor getSelected() {
+        return selectedChild;
+    }
 
     @Override
     public void act(float delta) {

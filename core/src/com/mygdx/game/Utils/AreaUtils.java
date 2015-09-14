@@ -3,6 +3,7 @@ package com.mygdx.game.Utils;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -25,13 +26,30 @@ public class AreaUtils {
     private static SpriteBatch spriteBatch;
 
     public static void init() {
-        spriteBatch = new SpriteBatch();
-        mBitmapFont = new BitmapFont(Gdx.files.internal("font/myfont.fnt"), Gdx.files.internal("font/myfont.png"), false);
+        init(0, 0, 180, 180);
+    }
+
+
+    private static float X, Y, Width, Height;
+
+    public static void init(float x, float y, float width, float height) {
+        X = x;
+        Y = y;
+        Width = width;
+        Height = height;
+        if (spriteBatch == null)
+            spriteBatch = new SpriteBatch();
+        if (mBitmapFont == null)
+            mBitmapFont = new BitmapFont(Gdx.files.internal("font/myfont.fnt"), Gdx.files.internal("font/myfont.png"), false);
+        if (pixmap == null) {
+            pixmap = new Pixmap(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), Pixmap.Format.RGBA8888);
+            pixmap.setColor(Color.BLUE.r, Color.BLUE.g, Color.BLUE.b, Color.BLUE.a / 2);
+        }
         stage = new Stage();
         texture = new Texture(Gdx.files.internal("badlogic.jpg"));
         image = new Image(texture);
-        image.setWidth(180);
-        image.setHeight(180);
+        image.setWidth(width);
+        image.setHeight(height);
         image.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
@@ -44,8 +62,25 @@ public class AreaUtils {
         InputMultiplexer inputMultiplexer = new InputMultiplexer();
         inputMultiplexer.addProcessor(stage);
         Gdx.input.setInputProcessor(inputMultiplexer);
+
     }
 
+    public static void initPixmap(float x, float y, float width, float height) {
+        X = x;
+        Y = y;
+        Width = width;
+        Height = height;
+        if (spriteBatch == null)
+            spriteBatch = new SpriteBatch();
+        if (mBitmapFont == null)
+            mBitmapFont = new BitmapFont(Gdx.files.internal("font/myfont.fnt"), Gdx.files.internal("font/myfont.png"), false);
+        if (pixmap == null)
+            pixmap = new Pixmap((int) width, (int) height, Pixmap.Format.RGBA8888);
+        pixmap.setColor(Color.BLUE.r, Color.BLUE.g, Color.BLUE.b, Color.BLUE.a / 2);
+        texture = new Texture(pixmap);
+    }
+
+    static Pixmap pixmap;
     static String show = " ";
 
     public static void draw() {
@@ -92,6 +127,12 @@ public class AreaUtils {
         logFrameRate();
         spriteBatch.begin();
         mBitmapFont.draw(spriteBatch, show, 150, 90);
+        spriteBatch.end();
+    }
+
+    public static void drawRect() {
+        spriteBatch.begin();
+        spriteBatch.draw(texture, X, Y);
         spriteBatch.end();
     }
 }

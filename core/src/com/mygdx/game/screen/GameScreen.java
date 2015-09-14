@@ -8,12 +8,11 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.game.Level.Level;
 import com.mygdx.game.Level.LevelManager;
-import com.mygdx.game.MyGdxGame;
+import com.mygdx.game.World.MyGdxGame;
 import com.mygdx.game.Utils.AreaUtils;
 import com.mygdx.game.Utils.Log;
-import com.mygdx.game.ViewActor.ScrollSod;
 import com.mygdx.game.impl.CameraAction;
-import com.mygdx.game.World;
+import com.mygdx.game.World.World;
 
 
 /**

@@ -12,7 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.mygdx.game.Level.LevelManager;
-import com.mygdx.game.MyGdxGame;
+import com.mygdx.game.World.MyGdxGame;
 import com.mygdx.game.Utils.Log;
 import com.mygdx.game.ViewHandler.ExitDialog;
 import com.mygdx.game.ViewHandler.AreaButton;
