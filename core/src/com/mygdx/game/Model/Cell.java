@@ -19,11 +19,16 @@ public class Cell {
         this.rectangle = rectangle;
         this.rowLen = row;
         this.colLen = col;
-        float width_item = rectangle.width / row;
-        float height_item = rectangle.height / col;
+        float width_item = rectangle.width / col;
+        float height_item = rectangle.height / row;
         for (int i = 0; i < rowLen; i++) {
             for (int j = 0; j < colLen; j++) {
-                CellInfo info = new CellInfo(new Rectangle(width_item * i, height_item * j, width_item, height_item), i, j);
+                CellInfo info = new CellInfo(new Rectangle(rectangle.x + width_item * j,
+                        rectangle.y + height_item * i,
+                        width_item, height_item), i, j);
+                Log.show("cellinfo:", rectangle.x + width_item * i,
+                        rectangle.y + height_item * j,
+                        width_item, height_item);
                 cells.add(info);
             }
         }

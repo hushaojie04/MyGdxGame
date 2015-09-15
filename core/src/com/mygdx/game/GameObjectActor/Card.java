@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.mygdx.game.Utils.Log;
 import com.mygdx.game.ViewActor.RadioButton;
 import com.mygdx.game.World.World;
 import com.mygdx.game.resource.Res;
@@ -13,21 +14,19 @@ import com.mygdx.game.resource.Res;
  * Created by Administrator on 2015/9/8.
  */
 public class Card extends GameObject implements RadioButton {
-    private final int cost;
     private boolean isEnoughLight = false;
-    private boolean isCD = true;
+    private boolean isCD = false;
     private Texture background, foreground;
     private Pixmap pixmap;
     private Texture texture, pressed;
     private BitmapFont bitmapFont;
     private boolean isPressed = false;
-    private Kind kind;
+    private final Kind kind;
 
-    public Card(Texture background, Texture foreground, int cost, Kind kind) {
+    public Card(Texture background, Texture foreground, Kind kind) {
         super();
         this.kind = kind;
         setTouchMode(true);
-        this.cost = cost;
         this.background = background;
         this.foreground = foreground;
         createPixmap();
@@ -63,9 +62,9 @@ public class Card extends GameObject implements RadioButton {
         } else {
             batch.draw(background, getX(), getY(), background.getWidth() * World.ratioW, background.getHeight() * World.ratioH);
         }
-        if (isPressed && pressed != null)
+        if (isEnoughLight && isPressed && pressed != null)
             batch.draw(pressed, getX(), getY(), pressed.getWidth() * World.ratioW, pressed.getHeight() * World.ratioH);
-        bitmapFont.draw(batch, "" + cost, getX() + background.getWidth() * World.ratioW * 0.6f, getY() + background.getHeight() * World.ratioH * 0.3f);
+        bitmapFont.draw(batch, "" + kind.cost, getX() + background.getWidth() * World.ratioW * 0.6f, getY() + background.getHeight() * World.ratioH * 0.3f);
     }
 
     private void createPressed() {
@@ -86,16 +85,26 @@ public class Card extends GameObject implements RadioButton {
     }
 
     public void checkCost(int wolrdLight) {
-        isEnoughLight = wolrdLight >= cost;
+        isEnoughLight = wolrdLight >= kind.cost;
     }
 
     @Override
     public void checked(boolean checked) {
-        if (isEnoughLight && isCD)
+        if (isEnoughLight && !isCD)
             isPressed = checked;
     }
 
+    public boolean isGrow() {
+        Log.show("isEnoughLight:" + isEnoughLight);
+        return isEnoughLight && !isCD;
+    }
+
     public enum Kind {
-        SunFlower, Peashooter;
+        SunFlower(50), Peashooter(150);
+        public int cost;
+
+        Kind(int cost) {
+            this.cost = cost;
+        }
     }
 }

@@ -17,7 +17,7 @@ import com.mygdx.game.impl.OnClickListener;
  * Created by Administrator on 2015/9/7.
  */
 public class GameObject extends Actor implements Disposable {
-    private Texture background;
+    private Texture background, shadow;
     private Animation animation;
     private float livingTime = 0;
     private TextureRegion currentFrame;
@@ -59,11 +59,20 @@ public class GameObject extends Actor implements Disposable {
         stage.addActor(this);
     }
 
+    public void setShadow(Texture shadow) {
+        this.shadow = shadow;
+    }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
 //        Log.show("draw " + getScaleX() + " " + getScaleY() + " " + getX());
+        if (shadow != null) {
+            batch.draw(shadow, getX() - getWidth() * 0.1f
+                    , getY() - getHeight() * 0.1f
+                    , shadow.getWidth() * World.ratioW
+                    , shadow.getHeight() * World.ratioH);
+        }
         if (background != null)
             batch.draw(background, getX(), getY(), getWidth(), getHeight());
         if (animation != null) {

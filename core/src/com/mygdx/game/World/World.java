@@ -21,6 +21,7 @@ import com.mygdx.game.Model.Cell;
 import com.mygdx.game.Utils.AreaUtils;
 import com.mygdx.game.Utils.GifDecoder;
 import com.mygdx.game.GameObjectActor.Card;
+import com.mygdx.game.Utils.Log;
 import com.mygdx.game.ViewActor.LinearLayout;
 import com.mygdx.game.ViewActor.RadioGroup;
 import com.mygdx.game.ViewActor.ScrollSod;
@@ -103,19 +104,21 @@ public class World {
     }
 
     public Plant createPlant(Cell.CellInfo cellInfo) {
-        cellInfo.isGrow = true;
-
         Card card = (Card) mLinearlayout.getSelected();
-        if (card == null) return null;
+        if (card == null || !card.isGrow()) return null;
+        cellInfo.isGrow = true;
         Card.Kind kind = card.getKind();
         Plant plant = null;
         if (kind == Card.Kind.Peashooter) {
-            plant = new Plant(stage, GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("image/plant/Peashooter.gif").read())
+            plant = new Plant(stage, GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("image/plants/Peashooter.gif").read())
                     , cellInfo.rectangle.x, cellInfo.rectangle.y);
         } else if (kind == Card.Kind.SunFlower) {
-            plant = new Plant(stage, GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("image/plant/SunFlower.gif").read())
+            plant = new Plant(stage, GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("image/plants/SunFlower.gif").read())
                     , cellInfo.rectangle.x, cellInfo.rectangle.y);
+        } else {
+            return null;
         }
+        setSunBack(-kind.cost);
         return plant;
     }
 
@@ -139,7 +142,7 @@ public class World {
                                     actor.setTouchMode(false);
                                     actor.getParent().removeActor(actor);
                                 }
-                                setSunBack();
+                                setSunBack(25);
                             }
                         });
                         ParallelAction Paction = Actions.parallel(action2, action1);
@@ -149,15 +152,15 @@ public class World {
                 });
                 sun.setLifeTime(true, 11f);
                 float y = (float) (Gdx.graphics.getHeight() * 0.1f + Math.random() * (Gdx.graphics.getHeight() * 0.4f));
-                MoveToAction action1 = Actions.moveTo(sun.getX(), y, 2f);
+                MoveToAction action1 = Actions.moveTo(sun.getX(), y, 5f);
                 sun.addAction(action1);
             }
         };
         createSumCommand.doCommand();
     }
 
-    public void setSunBack() {
-        sunCount += 25;
+    public void setSunBack(int countDelta) {
+        sunCount += countDelta;
         if (sunBack != null)
             sunBack.setText("" + sunCount);
         SnapshotArray<Actor> array = mLinearlayout.getChildren();
@@ -168,6 +171,7 @@ public class World {
         }
 
     }
+
 
     public float getWorldTime() {
         return worldTime;
@@ -205,6 +209,8 @@ public class World {
                 stage.addActor(scrollSod);
             }
         };
+        Log.show("cell:", Gdx.graphics.getWidth() * 0.24f, Gdx.graphics.getHeight() * 0.44f,
+                scrollSod.getWidth(), scrollSod.getHeight());
         mCell = new Cell(new Rectangle(Gdx.graphics.getWidth() * 0.24f, Gdx.graphics.getHeight() * 0.44f,
                 scrollSod.getWidth(), scrollSod.getHeight()),
                 1, 9);
@@ -231,8 +237,8 @@ public class World {
     }
 
     private void createCard() {
-        mLinearlayout.add(new Card(Res.getPeashooterG(), Res.getPeashooter(), 150, Card.Kind.Peashooter));
-        mLinearlayout.add(new Card(Res.getSunFlowerG(), Res.getSunFlower(), 50, Card.Kind.SunFlower));
+        mLinearlayout.add(new Card(Res.getPeashooterG(), Res.getPeashooter(), Card.Kind.Peashooter));
+        mLinearlayout.add(new Card(Res.getSunFlowerG(), Res.getSunFlower(), Card.Kind.SunFlower));
         mLinearlayout.setPosition(mLinearlayout.getX(), Gdx.graphics.getHeight() - mLinearlayout.getHeight());
         mapSceneObjects.add(mLinearlayout);
         stage.addActor(mLinearlayout);

@@ -33,6 +33,7 @@ public class Res {
         manager.load("image/Zombie/FlagMeterEmpty.png", Texture.class);
         manager.load("image/Zombie/FlagMeterFull.png", Texture.class);
         manager.load("image/Zombie/FlagMeterParts1.png", Texture.class);
+        manager.load("image/map/plantshadow32.png", Texture.class);
       /* ******************************BitmatFont********************************* */
         manager.load("font/myfont.fnt", BitmapFont.class);
 
@@ -59,6 +60,7 @@ public class Res {
         manager.unload("image/Zombie/FlagMeterEmpty.png");
         manager.unload("image/Zombie/FlagMeterFull.png");
         manager.unload("image/Zombie/FlagMeterParts1.png");
+        manager.unload("image/map/plantshadow32.png");
         /* ******************************BitmatFont********************************* */
         manager.unload("font/myfont.fnt");
 
@@ -111,6 +113,10 @@ public class Res {
 
     public static Texture getLawnMower() {
         return manager.get("image/map/LawnMower.gif", Texture.class);
+    }
+
+    public static Texture getShadow() {
+        return manager.get("image/map/plantshadow32.png", Texture.class);
     }
 
     public static Texture getPeashooterbmp() {

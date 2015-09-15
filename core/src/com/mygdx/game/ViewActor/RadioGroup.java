@@ -45,7 +45,12 @@ public class RadioGroup extends LinearLayout {
     }
 
     public Actor getSelected() {
-        return selectedChild;
+        if (selectedChild == null)
+            return null;
+        ((RadioButton) selectedChild).checked(false);
+        Actor temp = selectedChild;
+        selectedChild = null;
+        return temp;
     }
 
     @Override
