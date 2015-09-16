@@ -1,10 +1,26 @@
 {
-  "attackCount":"6",
-  "zombiesContent":[
-    {"type":"Zombie","count":"1"},
-    {"type":"Zombie","count":"1"},
-    {"type":"Zombie","count":"1"},
-    {"type":"Zombie","count":"2"}
-   ],
-  "plantsContent":["SunFlower","Peashooter"]
+  "level": "1",
+  "attackCount": "6",
+  "zombiesContent": [
+    {
+      "type": "Zombie",
+      "count": "1"
+    },
+    {
+      "type": "Zombie",
+      "count": "1"
+    },
+    {
+      "type": "Zombie",
+      "count": "1"
+    },
+    {
+      "type": "Zombie",
+      "count": "2"
+    }
+  ],
+  "plantsContent": [
+    "SunFlower",
+    "Peashooter"
+  ]
 }

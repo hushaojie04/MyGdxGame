@@ -33,6 +33,10 @@ public class GameObject extends Actor implements Disposable {
         };
     }
 
+    public void setAnimation(Animation animation) {
+        this.animation = animation;
+    }
+
     public ClickHelper getClickHelper() {
         return mClickHelper;
     }

@@ -9,6 +9,7 @@ import java.util.List;
  * Created by Administrator on 2015/9/7.
  */
 public class Level {
+    private int level;
     private int attackCount;
     private final List<String> plantsContent = new ArrayList<String>();
     private final List<ZombieInfo> zombiesContent = new ArrayList<ZombieInfo>();
@@ -30,6 +31,14 @@ public class Level {
 
     public List<ZombieInfo> getZombiesContent() {
         return zombiesContent;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
     }
 
     public static class ZombieInfo {

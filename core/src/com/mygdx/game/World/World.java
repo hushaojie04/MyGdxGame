@@ -16,9 +16,10 @@ import com.badlogic.gdx.utils.SnapshotArray;
 import com.mygdx.game.GameObjectActor.GameObject;
 import com.mygdx.game.GameObjectActor.LifeObject;
 import com.mygdx.game.GameObjectActor.Plant;
+import com.mygdx.game.GameObjectActor.BaseZombie;
 import com.mygdx.game.Level.Level;
 import com.mygdx.game.Model.Cell;
-import com.mygdx.game.Utils.AreaUtils;
+import com.mygdx.game.Plant.PlantFactory;
 import com.mygdx.game.Utils.GifDecoder;
 import com.mygdx.game.GameObjectActor.Card;
 import com.mygdx.game.Utils.Log;
@@ -28,6 +29,7 @@ import com.mygdx.game.ViewActor.ScrollSod;
 import com.mygdx.game.ViewActor.TextView;
 import com.mygdx.game.impl.OnClickListener;
 import com.mygdx.game.resource.Res;
+import com.mygdx.game.zombie.ZombieFactory;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -48,16 +50,21 @@ public class World {
     public TextView sunBack;
     public int sunCount;
     public float time;
-
+    private PlantFactory mPlantFactory;
+    private ZombieFactory mZombieFactory;
     private Command mCommand;
     private Stage stage;
     private float worldTime;
     private Animation sunAnim;
     private Command createSumCommand;
     private Cell mCell;
+    private Level mLevel;
+    private int attackCount = 0;
 
     public World() {
         sunAnim = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("image/map/Sun.gif").read());
+        mPlantFactory = new PlantFactory();
+        mZombieFactory = new ZombieFactory();
     }
 
     public void createGameObject(Level level, Stage stage) {
@@ -76,6 +83,14 @@ public class World {
                 time = 0;
                 if (createSumCommand != null) {
                     createSumCommand.doCommand();
+                }
+            }
+            if ((int) worldTime % 3 == 0) {
+                attackCount++;
+                if (attackCount < mLevel.getZombiesContent().size())
+                    mLevel.getZombiesContent().get(attackCount);
+                else {
+
                 }
             }
             if (mCell != null)
@@ -109,15 +124,7 @@ public class World {
         cellInfo.isGrow = true;
         Card.Kind kind = card.getKind();
         Plant plant = null;
-        if (kind == Card.Kind.Peashooter) {
-            plant = new Plant(stage, GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("image/plants/Peashooter.gif").read())
-                    , cellInfo.rectangle.x, cellInfo.rectangle.y);
-        } else if (kind == Card.Kind.SunFlower) {
-            plant = new Plant(stage, GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("image/plants/SunFlower.gif").read())
-                    , cellInfo.rectangle.x, cellInfo.rectangle.y);
-        } else {
-            return null;
-        }
+        plant = mPlantFactory.newPlant(kind, stage, cellInfo.rectangle.x, cellInfo.rectangle.y);
         setSunBack(-kind.cost);
         return plant;
     }
@@ -181,8 +188,18 @@ public class World {
 
     public void start() {
         isStart = true;
+        clearPreviewZombies();
+        zombieObjects.clear();
         if (mCommand != null)
             mCommand.doCommand();
+    }
+
+    private void clearPreviewZombies() {
+        Iterator<GameObject> iterator = zombieObjects.iterator();
+        while (iterator.hasNext()) {
+            GameObject object = iterator.next();
+            object.getParent().removeActor(object);
+        }
     }
 
     private void createBackground(final Stage stage) {
@@ -245,6 +262,7 @@ public class World {
     }
 
     private void createZombieObjects(Level level, Stage stage) {
+        mLevel = level;
         List<Level.ZombieInfo> zombieContents = level.getZombiesContent();
         GameObject gameObject;
         for (Level.ZombieInfo info : zombieContents) {

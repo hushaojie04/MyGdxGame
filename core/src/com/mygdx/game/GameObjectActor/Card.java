@@ -94,6 +94,8 @@ public class Card extends GameObject implements RadioButton {
             isPressed = checked;
     }
 
+
+
     public boolean isGrow() {
         Log.show("isEnoughLight:" + isEnoughLight);
         return isEnoughLight && !isCD;
