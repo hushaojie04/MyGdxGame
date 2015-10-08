@@ -12,9 +12,12 @@ import com.mygdx.game.resource.Res;
  * Created by Administrator on 2015/9/16.
  */
 public class Zombie extends BaseZombie {
+
+
     public Zombie(Stage stage, float x, float y) {
-        super(stage, GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("image/Zombie/Zombie.gif").read()), x, y);
-        Log.show("Bullet " + x + " " + y);
-        setShadow(Res.getShadow());
+        super(stage, Res.zombieAimation, x, y);
+        Log.show("Zombie " + x + " " + y);
+        setShadow(Res.getShadow(), 60, 10);
+        setSpeedX(-1);
     }
 }

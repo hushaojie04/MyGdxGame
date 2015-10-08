@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Disposable;
@@ -22,6 +23,7 @@ public class GameObject extends Actor implements Disposable {
     private float livingTime = 0;
     private TextureRegion currentFrame;
     private ClickHelper mClickHelper;
+    private float shadowPaddingX, shadowPaddingY;
 
     public GameObject() {
         super();
@@ -49,7 +51,7 @@ public class GameObject extends Actor implements Disposable {
     public GameObject(Stage stage, Animation animation, float x, float y) {
         this();
         init(stage, animation, null, x, y,
-                animation.getKeyFrames()[0].getRegionWidth() * World.ratioW,
+                animation.getKeyFrames()[0].getRegionWidth() * World.ratioW ,
                 animation.getKeyFrames()[0].getRegionHeight() * World.ratioH);
     }
 
@@ -63,8 +65,10 @@ public class GameObject extends Actor implements Disposable {
         stage.addActor(this);
     }
 
-    public void setShadow(Texture shadow) {
+    public void setShadow(Texture shadow, float paddingX, float paddingY) {
         this.shadow = shadow;
+        shadowPaddingX = paddingX;
+        shadowPaddingY = paddingY;
     }
 
     @Override
@@ -72,8 +76,9 @@ public class GameObject extends Actor implements Disposable {
         super.draw(batch, parentAlpha);
 //        Log.show("draw " + getScaleX() + " " + getScaleY() + " " + getX());
         if (shadow != null) {
-            batch.draw(shadow, getX() - getWidth() * 0.1f
-                    , getY() - getHeight() * 0.1f
+
+            batch.draw(shadow, shadowPaddingX + getX() - (shadow.getWidth() * World.ratioW - getWidth()) * 0.5f
+                    , shadowPaddingY + getY() - getHeight() * 0.1f
                     , shadow.getWidth() * World.ratioW
                     , shadow.getHeight() * World.ratioH);
         }
@@ -128,7 +133,7 @@ public class GameObject extends Actor implements Disposable {
     @Override
     protected void finalize() throws Throwable {
         super.finalize();
-        Log.show("finalize " + hashCode());
+        Log.show("finalize " + getClass().getName());
     }
 
     @Override
@@ -138,4 +143,7 @@ public class GameObject extends Actor implements Disposable {
         animation = null;
     }
 
+    public Rectangle rectangle() {
+        return new Rectangle(getX(), getY(), getWidth(), getHeight());
+    }
 }

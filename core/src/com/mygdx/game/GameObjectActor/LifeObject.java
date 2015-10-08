@@ -4,6 +4,7 @@ package com.mygdx.game.GameObjectActor;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.game.Utils.Log;
 
@@ -12,10 +13,12 @@ import com.mygdx.game.Utils.Log;
  */
 public class LifeObject extends GameObject {
     public final boolean isMove;
-    private float speedX = -1, speedY = -1, distanceX = 0, distanceY = 0;
+    private float speedX = 0, speedY = 0, distanceX = 0, distanceY = 0;
     private Object skill;
     private int attack;
     private int defense;
+    private boolean isMoveNODistance = false;
+    private boolean isMoving = true;
 
     public LifeObject(Stage stage, Texture texture, float x, float y, float width, float height, boolean isMove) {
         super(stage, texture, x, y, width, height);
@@ -28,6 +31,7 @@ public class LifeObject extends GameObject {
     }
 
     public void setSpeedX(float speed) {
+        isMoveNODistance = false;
         this.speedX = speed;
     }
 
@@ -35,6 +39,7 @@ public class LifeObject extends GameObject {
     s
      */
     public void moveDistance(float duration, float x, float y) {
+        isMoveNODistance = true;
         distanceX = x;
         distanceY = y;
         if (distanceX != 0) {
@@ -76,23 +81,41 @@ public class LifeObject extends GameObject {
     @Override
     public void act(float delta) {
         super.act(delta);
-        if (isMove) {
-            if (distanceX == 0) {
-            } else {
-                if (speedX < 0 && getX() > distanceX) {
-                    setX(getX() + speedX);
-                } else if (speedX > 0 && getX() < distanceX) {
-                    setX(getX() + speedX);
+        if (isMove && isMoving) {
+            if (isMoveNODistance) {
+                if (distanceX == 0) {
+                } else {
+
+                    if (speedX < 0 && getX() > distanceX) {
+                        setX(getX() + speedX);
+                    } else if (speedX > 0 && getX() < distanceX) {
+                        setX(getX() + speedX);
+                    }
                 }
-            }
-            if (distanceY == 0) {
-            } else {
-                if (speedY < 0 && getY() > distanceY) {
-                    setY(getY() + speedY);
-                } else if (speedY > 0 && getY() < distanceY) {
-                    setY(getY() + speedY);
+                if (distanceY == 0) {
+                } else {
+                    if (speedY < 0 && getY() > distanceY) {
+                        setY(getY() + speedY);
+                    } else if (speedY > 0 && getY() < distanceY) {
+                        setY(getY() + speedY);
+                    }
                 }
+            } else {
+                if (speedX != 0)
+                    setX(getX() + speedX);
+                if (speedX != 0)
+                    setY(getY() + speedY);
             }
         }
     }
+
+    public void stopMove() {
+        isMoving = false;
+    }
+
+    public void startMove() {
+        isMoving = true;
+    }
+
+
 }

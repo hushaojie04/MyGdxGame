@@ -3,8 +3,12 @@ package com.mygdx.game.resource;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.mygdx.game.Utils.GifDecoder;
+
+import java.io.InputStream;
 
 /**
  * Created by Administrator on 2015/9/2.
@@ -34,6 +38,7 @@ public class Res {
         manager.load("image/Zombie/FlagMeterFull.png", Texture.class);
         manager.load("image/Zombie/FlagMeterParts1.png", Texture.class);
         manager.load("image/map/plantshadow32.png", Texture.class);
+        manager.load("image/map/plantshadow8.png", Texture.class);
       /* ******************************BitmatFont********************************* */
         manager.load("font/myfont.fnt", BitmapFont.class);
 
@@ -61,6 +66,8 @@ public class Res {
         manager.unload("image/Zombie/FlagMeterFull.png");
         manager.unload("image/Zombie/FlagMeterParts1.png");
         manager.unload("image/map/plantshadow32.png");
+        manager.unload("image/map/plantshadow8.gif");
+
         /* ******************************BitmatFont********************************* */
         manager.unload("font/myfont.fnt");
 
@@ -119,6 +126,10 @@ public class Res {
         return manager.get("image/map/plantshadow32.png", Texture.class);
     }
 
+    public static Texture getPlantshadow8() {
+        return manager.get("image/map/plantshadow8.png", Texture.class);
+    }
+
     public static Texture getPeashooterbmp() {
         return manager.get("image/card/Peashooter.bmp", Texture.class);
     }
@@ -158,5 +169,13 @@ public class Res {
     /* ******************************BitmatFont********************************* */
     public static BitmapFont getMyfont() {
         return manager.get("font/myfont.fnt", BitmapFont.class);
+    }
+
+    /* ******************************Animation********************************* */
+    public static Animation zombieAimation,sunFlowerAimation;
+
+    static {
+        zombieAimation = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("image/Zombie/Zombie.gif").read());
+        sunFlowerAimation = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("image/plants/SunFlower.gif").read());
     }
 }

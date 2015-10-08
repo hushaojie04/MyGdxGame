@@ -13,7 +13,7 @@ public class Bullet extends LifeObject {
     public Bullet(Stage stage, Animation move, Animation bom, float x, float y) {
         super(stage, move, x, y, true);
         Log.show("Bullet " + x + " " + y);
-        setShadow(Res.getShadow());
+        setShadow(Res.getShadow(),0,0);
     }
     public enum Kind {
         SunFlower(50), Peashooter(150);
@@ -22,5 +22,10 @@ public class Bullet extends LifeObject {
         Kind(int cost) {
             this.cost = cost;
         }
+    }
+    @Override
+    protected void finalize() throws Throwable {
+        super.finalize();
+        Log.show("finalize " + getClass().getName());
     }
 }

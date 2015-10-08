@@ -29,6 +29,7 @@ import com.mygdx.game.ViewActor.ScrollSod;
 import com.mygdx.game.ViewActor.TextView;
 import com.mygdx.game.impl.OnClickListener;
 import com.mygdx.game.resource.Res;
+import com.mygdx.game.zombie.Zombie;
 import com.mygdx.game.zombie.ZombieFactory;
 
 import java.util.ArrayList;
@@ -59,7 +60,8 @@ public class World {
     private Command createSumCommand;
     private Cell mCell;
     private Level mLevel;
-    private int attackCount = 0;
+    private int attackCount = -1;
+    private float attackTime = 0;
 
     public World() {
         sunAnim = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("image/map/Sun.gif").read());
@@ -78,6 +80,7 @@ public class World {
     public void act(float delta) {
         if (isStart) {
             worldTime += delta;
+            attackTime += delta;
             time += delta;
             if (time > 5f) {
                 time = 0;
@@ -85,16 +88,30 @@ public class World {
                     createSumCommand.doCommand();
                 }
             }
-            if ((int) worldTime % 3 == 0) {
+            if (attackTime > 7f) {
+                attackTime = 0;
                 attackCount++;
-                if (attackCount < mLevel.getZombiesContent().size())
-                    mLevel.getZombiesContent().get(attackCount);
-                else {
-
-                }
+                createAttackZombie();
             }
             if (mCell != null)
                 loopCell();
+        }
+    }
+
+    public void createAttackZombie() {
+        if (attackCount < mLevel.getZombiesContent().size()) {
+            Level.ZombieInfo zombieInfo = mLevel.getZombiesContent().get(attackCount);
+            if (zombieInfo.getType().equals("Zombie")) {
+                int x = 0;
+                for (int i = 0; i < zombieInfo.getCount(); i++) {
+                    x += 100;
+                    BaseZombie zombie = mZombieFactory.newZombie(BaseZombie.Kind.Zombie, stage, Gdx.graphics.getWidth() + x, 500);
+                    zombieObjects.add(zombie);
+                }
+            }
+
+        } else {
+
         }
     }
 
@@ -105,6 +122,16 @@ public class World {
             Cell.CellInfo info = iterator.next();
             if (info.isGrow) {
                 Plant plant = (Plant) info.getTag();
+                List<GameObject> copyZombies = new ArrayList<GameObject>();
+                copyZombies.addAll(zombieObjects);
+                Iterator<GameObject> iterator1 = copyZombies.iterator();
+                while (iterator1.hasNext()) {
+                    BaseZombie zombie = (BaseZombie) iterator1.next();
+                    if (zombie.rectangle().overlaps(plant.rectangle())) {
+                        Log.show("zombie:"+zombie.rectangle()+" plant:"+plant.rectangle());
+                        zombie.stopMove();
+                    }
+                }
             } else {
                 if (Gdx.input.isTouched()) {
                     float x = Gdx.input.getX();
@@ -117,6 +144,7 @@ public class World {
 
         }
     }
+
 
     public Plant createPlant(Cell.CellInfo cellInfo) {
         Card card = (Card) mLinearlayout.getSelected();
@@ -134,7 +162,7 @@ public class World {
             @Override
             public void doCommand() {
                 float x = (float) (Gdx.graphics.getWidth() * 0.1f + Math.random() * (Gdx.graphics.getWidth() * 0.8f));
-                LifeObject sun = new LifeObject(stage, sunAnim, x, Gdx.graphics.getHeight(), true);
+                LifeObject sun = new LifeObject(stage, sunAnim, x, Gdx.graphics.getHeight(), false);
                 sun.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(Object object) {

@@ -10,10 +10,18 @@ import com.mygdx.game.resource.Res;
  * Created by Administrator on 2015/9/16.
  */
 public class BaseZombie extends LifeObject {
+    public boolean isDead;
+
     public BaseZombie(Stage stage, Animation animation, float x, float y) {
         super(stage, animation, x, y, true);
         Log.show("Zombie " + x + " " + y);
-        setShadow(Res.getShadow());
+        isDead = false;
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        super.finalize();
+        Log.show("finalize " + getClass().getName());
     }
 
     public enum Kind {
