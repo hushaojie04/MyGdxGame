@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.game.Level.Level;
 import com.mygdx.game.Level.LevelManager;
+import com.mygdx.game.Utils.LineUtils;
+import com.mygdx.game.Utils.LineUtilsForBeiBei;
 import com.mygdx.game.World.MyGdxGame;
 import com.mygdx.game.Utils.AreaUtils;
 import com.mygdx.game.Utils.Log;
@@ -21,7 +23,6 @@ import com.mygdx.game.World.World;
 public class GameScreen implements Screen {
     private Level currentLevel = null;
     private World world;
-    private Camera camera;
     public float distance;
     private CameraAction cameraAction;
 
@@ -41,7 +42,6 @@ public class GameScreen implements Screen {
         Log.show("gamescreen show");
         stage = new Stage();
         world = new World();
-        camera = stage.getCamera();
         cameraAction = new CameraAction(previewOnCameraAction);
         LevelManager.getManager().setLevel(1);
         currentLevel = LevelManager.getManager().getLevel();
@@ -50,17 +50,18 @@ public class GameScreen implements Screen {
 //        AreaUtils.init();
         AreaUtils.initFPS();
         Gdx.input.setInputProcessor(stage);
+        mLineUtilsForBeiBei =new LineUtils();
     }
-
+    LineUtils mLineUtilsForBeiBei;
     private boolean isPreview = false;
 
     @Override
     public void render(float v) {
         Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        world.act(Gdx.graphics.getDeltaTime());
         stage.act();
         stage.draw();
+        world.act(Gdx.graphics.getDeltaTime());
 //        AreaUtils.draw();
         if (!isPreview) {
             if (cameraAction.action(stage)) {
@@ -71,6 +72,8 @@ public class GameScreen implements Screen {
         if (Gdx.input.isKeyJustPressed(Input.Keys.BACK)) {
             myGdxGame.openMenuScreen();
         }
+//        mLineUtilsForBeiBei.act();
+//        mLineUtilsForBeiBei.draw();
         AreaUtils.drawFPS();
     }
 

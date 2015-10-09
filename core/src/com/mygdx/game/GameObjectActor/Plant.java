@@ -15,6 +15,7 @@ public class Plant extends LifeObject {
         super(stage, animation, x, y, isMove);
         Log.show("Plant " + x + " " + y);
         setShadow(Res.getShadow(), 0, 0);
+        defense = 4f;
     }
 
     public LifeObject produce() {
@@ -25,9 +26,5 @@ public class Plant extends LifeObject {
     protected void finalize() throws Throwable {
         super.finalize();
         Log.show("finalize " + getClass().getName());
-    }
-
-    public Rectangle rectangle() {
-        return new Rectangle(getX(), getY(), 0, getHeight());
     }
 }

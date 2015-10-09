@@ -172,10 +172,11 @@ public class Res {
     }
 
     /* ******************************Animation********************************* */
-    public static Animation zombieAimation,sunFlowerAimation;
+    public static Animation zombieAimation,zombieAttackAimation,sunFlowerAimation;
 
     static {
         zombieAimation = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("image/Zombie/Zombie.gif").read());
         sunFlowerAimation = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("image/plants/SunFlower.gif").read());
+        zombieAttackAimation= GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("image/Zombie/ZombieAttack.gif").read());
     }
 }

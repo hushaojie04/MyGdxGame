@@ -7,6 +7,11 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.game.Utils.Log;
+import com.mygdx.game.resource.Res;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Created by Administrator on 2015/9/7.
@@ -14,11 +19,16 @@ import com.mygdx.game.Utils.Log;
 public class LifeObject extends GameObject {
     public final boolean isMove;
     private float speedX = 0, speedY = 0, distanceX = 0, distanceY = 0;
-    private Object skill;
-    private int attack;
-    private int defense;
-    private boolean isMoveNODistance = false;
-    private boolean isMoving = true;
+    protected Object skill;
+    protected int attack;
+    protected float defense;
+    protected boolean isMoveNODistance = false;
+    protected boolean isMoving = true;
+    protected boolean isAttacking = false;
+    protected boolean isAttacked = false;
+    private float defenseTime = 0;
+    private boolean isDead = false;
+    private List<LifeObject> attackGroup = new ArrayList<LifeObject>();
 
     public LifeObject(Stage stage, Texture texture, float x, float y, float width, float height, boolean isMove) {
         super(stage, texture, x, y, width, height);
@@ -70,7 +80,7 @@ public class LifeObject extends GameObject {
         return attack;
     }
 
-    public int getDefense() {
+    public float getDefense() {
         return defense;
     }
 
@@ -81,6 +91,18 @@ public class LifeObject extends GameObject {
     @Override
     public void act(float delta) {
         super.act(delta);
+        checkAttack();
+        if (attackGroup.size() > 0) {
+            defenseTime += delta * attackGroup.size();
+            Log.show("delta:" + delta);
+            Log.show("delta:" + attackGroup.size());
+            if (defenseTime > defense) {
+                Log.show("defenseTime:" + defenseTime);
+                isDead = true;
+                attackGroup.clear();
+                getParent().removeActor(this);
+            }
+        }
         if (isMove && isMoving) {
             if (isMoveNODistance) {
                 if (distanceX == 0) {
@@ -109,6 +131,22 @@ public class LifeObject extends GameObject {
         }
     }
 
+    private void checkAttack() {
+        Iterator<LifeObject> iterator = attackGroup.iterator();
+        while (iterator.hasNext()) {
+            LifeObject object = iterator.next();
+            if (!object.isDead()) {
+                object.startMove();
+                object.stopAttack();
+            } else
+                attackGroup.remove(object);
+        }
+    }
+
+    public boolean isDead() {
+        return isDead;
+    }
+
     public void stopMove() {
         isMoving = false;
     }
@@ -117,5 +155,16 @@ public class LifeObject extends GameObject {
         isMoving = true;
     }
 
+    public void stopAttack() {
+        isAttacking = false;
+    }
 
+    public void startAttack() {
+        isAttacking = true;
+    }
+
+    public void beingAttacked(LifeObject attackObject) {
+        if (!attackGroup.contains(attackObject))
+            attackGroup.add(attackObject);
+    }
 }

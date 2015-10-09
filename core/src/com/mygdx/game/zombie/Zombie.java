@@ -2,6 +2,7 @@ package com.mygdx.game.zombie;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.game.GameObjectActor.BaseZombie;
 import com.mygdx.game.Utils.GifDecoder;
@@ -19,5 +20,17 @@ public class Zombie extends BaseZombie {
         Log.show("Zombie " + x + " " + y);
         setShadow(Res.getShadow(), 60, 10);
         setSpeedX(-1);
+    }
+
+    public void stopAttack() {
+        animation = Res.zombieAimation;
+    }
+
+    public void startAttack() {
+        animation = Res.zombieAttackAimation;
+    }
+
+    public Rectangle rectangle() {
+        return new Rectangle(getX() + getWidth() * 0.7f, getY(), 1, getHeight());
     }
 }

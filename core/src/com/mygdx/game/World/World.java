@@ -55,6 +55,7 @@ public class World {
     private ZombieFactory mZombieFactory;
     private Command mCommand;
     private Stage stage;
+    private Stage highStage;
     private float worldTime;
     private Animation sunAnim;
     private Command createSumCommand;
@@ -67,6 +68,7 @@ public class World {
         sunAnim = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("image/map/Sun.gif").read());
         mPlantFactory = new PlantFactory();
         mZombieFactory = new ZombieFactory();
+        highStage = new Stage();
     }
 
     public void createGameObject(Level level, Stage stage) {
@@ -88,7 +90,7 @@ public class World {
                     createSumCommand.doCommand();
                 }
             }
-            if (attackTime > 7f) {
+            if (attackTime > 10f) {
                 attackTime = 0;
                 attackCount++;
                 createAttackZombie();
@@ -96,6 +98,8 @@ public class World {
             if (mCell != null)
                 loopCell();
         }
+        highStage.act();
+        highStage.draw();
     }
 
     public void createAttackZombie() {
@@ -105,7 +109,7 @@ public class World {
                 int x = 0;
                 for (int i = 0; i < zombieInfo.getCount(); i++) {
                     x += 100;
-                    BaseZombie zombie = mZombieFactory.newZombie(BaseZombie.Kind.Zombie, stage, Gdx.graphics.getWidth() + x, 500);
+                    BaseZombie zombie = mZombieFactory.newZombie(BaseZombie.Kind.Zombie, highStage, Gdx.graphics.getWidth() + x, 500);
                     zombieObjects.add(zombie);
                 }
             }
@@ -122,20 +126,28 @@ public class World {
             Cell.CellInfo info = iterator.next();
             if (info.isGrow) {
                 Plant plant = (Plant) info.getTag();
+                if (plant.isDead()) {
+                    info.setTag(null);
+                    info.isGrow = false;
+                    continue;
+                }
                 List<GameObject> copyZombies = new ArrayList<GameObject>();
                 copyZombies.addAll(zombieObjects);
                 Iterator<GameObject> iterator1 = copyZombies.iterator();
                 while (iterator1.hasNext()) {
                     BaseZombie zombie = (BaseZombie) iterator1.next();
                     if (zombie.rectangle().overlaps(plant.rectangle())) {
-                        Log.show("zombie:"+zombie.rectangle()+" plant:"+plant.rectangle());
+//                        Log.show("zombie:"+zombie.rectangle()+" plant:"+plant.rectangle());
                         zombie.stopMove();
+                        zombie.startAttack();
+                        plant.beingAttacked(zombie);
                     }
                 }
             } else {
                 if (Gdx.input.isTouched()) {
                     float x = Gdx.input.getX();
                     float y = Gdx.input.getY();
+//                    Log.show("isTouched:" + x + " " + y);
                     if (info.rectangle.contains(x, y)) {
                         info.setTag(createPlant(info));
                     }
@@ -153,6 +165,7 @@ public class World {
         Card.Kind kind = card.getKind();
         Plant plant = null;
         plant = mPlantFactory.newPlant(kind, stage, cellInfo.rectangle.x, cellInfo.rectangle.y);
+
         setSunBack(-kind.cost);
         return plant;
     }
@@ -162,7 +175,7 @@ public class World {
             @Override
             public void doCommand() {
                 float x = (float) (Gdx.graphics.getWidth() * 0.1f + Math.random() * (Gdx.graphics.getWidth() * 0.8f));
-                LifeObject sun = new LifeObject(stage, sunAnim, x, Gdx.graphics.getHeight(), false);
+                LifeObject sun = new LifeObject(highStage, sunAnim, x, Gdx.graphics.getHeight(), false);
                 sun.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(Object object) {

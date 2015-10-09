@@ -13,17 +13,21 @@ import com.mygdx.game.Utils.Log;
 import com.mygdx.game.ViewActor.ClickHelper;
 import com.mygdx.game.World.World;
 import com.mygdx.game.impl.OnClickListener;
+import com.sun.prism.shader.Solid_Color_AlphaTest_Loader;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Administrator on 2015/9/7.
  */
 public class GameObject extends Actor implements Disposable {
-    private Texture background, shadow;
-    private Animation animation;
-    private float livingTime = 0;
-    private TextureRegion currentFrame;
-    private ClickHelper mClickHelper;
-    private float shadowPaddingX, shadowPaddingY;
+    protected Texture background, shadow;
+    protected Animation animation;
+    protected float livingTime = 0;
+    protected TextureRegion currentFrame;
+    protected ClickHelper mClickHelper;
+    protected float shadowPaddingX, shadowPaddingY;
 
     public GameObject() {
         super();
@@ -50,8 +54,9 @@ public class GameObject extends Actor implements Disposable {
 
     public GameObject(Stage stage, Animation animation, float x, float y) {
         this();
+        Log.show(getClass().toString() + " " + animation.getKeyFrames()[0].getRegionWidth() * World.ratioW);
         init(stage, animation, null, x, y,
-                animation.getKeyFrames()[0].getRegionWidth() * World.ratioW ,
+                animation.getKeyFrames()[0].getRegionWidth() * World.ratioW,
                 animation.getKeyFrames()[0].getRegionHeight() * World.ratioH);
     }
 
@@ -76,7 +81,6 @@ public class GameObject extends Actor implements Disposable {
         super.draw(batch, parentAlpha);
 //        Log.show("draw " + getScaleX() + " " + getScaleY() + " " + getX());
         if (shadow != null) {
-
             batch.draw(shadow, shadowPaddingX + getX() - (shadow.getWidth() * World.ratioW - getWidth()) * 0.5f
                     , shadowPaddingY + getY() - getHeight() * 0.1f
                     , shadow.getWidth() * World.ratioW
@@ -145,5 +149,17 @@ public class GameObject extends Actor implements Disposable {
 
     public Rectangle rectangle() {
         return new Rectangle(getX(), getY(), getWidth(), getHeight());
+    }
+
+    public class State {
+        public Map<Integer, Object> mapKV = new HashMap<Integer, Object>();
+
+        public State() {
+
+        }
+
+        protected void updateState(int state) {
+
+        }
     }
 }
